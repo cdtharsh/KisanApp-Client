@@ -1,0 +1,105 @@
+# Flutter/Dart/Pub related files
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-versions
+build/
+pubspec.lock
+
+# Ongoing builds and iOS/Android artifacts
+**/build/
+**/.gradle/
+**/.idea/
+**/.vscode/
+**/*.iml
+.gradle/
+local.properties
+/.dart_tool/
+/.flutter-plugins-dependencies
+flutter_export_environment.sh
+
+# Specific directories for iOS and Android
+ios/Flutter/.last_build_id
+ios/Pods
+ios/.symlinks
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Generated.xcconfig
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.log
+
+# Generated and build artifacts
+.dart_tool/
+.build/
+.idea/
+.vscode/
+*.iml
+
+# Packages and dependencies
+.packages
+.pub-cache/
+pubspec.lock
+.pinned
+
+# Intellij and VSCode
+*.iml
+.idea/
+*.ipr
+*.iws
+*.launch
+*.app
+
+# macOS
+.DS_Store
+/ios/Pods/
+/ios/.symlinks/
+
+# Web artifacts
+web/
+*.js
+*.html
+.dart_tool/
+.packages
+
+# Linux build
+/linux/.flutter-plugins
+/linux/.flutter-plugins-dependencies
+/linux/flutter/generated_plugin_registrant.cc
+/linux/flutter/CMakeLists.txt
+
+# Windows build
+/windows/.flutter-plugins
+/windows/.flutter-plugins-dependencies
+/windows/flutter/generated_plugin_registrant.cc
+/windows/flutter/CMakeLists.txt
+
+# JetBrains related files
+.idea/
+*.iml
+*.ipr
+
+# Android Studio related files
+.gradle/
+*.apk
+*.jks
+*.keystore
+
+# VSCode related files
+.vscode/
+
+# App-specific
+*.key
+*.pem
+*.crt
+*.db
+
+# User-specific
+*.log
+*.swp
+*.temp
+*.tmp
