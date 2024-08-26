@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../utils/router/routes.dart';
+import '../router/routes.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();

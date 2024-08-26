@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:kisanapp/screens/authentication/login_screen.dart';
 import 'package:kisanapp/screens/authentication/mail_verification.dart';
 import 'package:kisanapp/screens/authentication/signup_screen.dart';
 import 'package:kisanapp/screens/home/home.dart';
@@ -11,6 +12,7 @@ class AppRoutes {
   static const String signup = '/signup';
   static const String home = '/home';
   static const String email = '/email';
+  static const String login = '/login';
 
   static List<GetPage> routes = [
     GetPage(name: splash, page: () => const SplashScreen()),
@@ -24,6 +26,7 @@ class AppRoutes {
             Get.parameters['email'] ?? ''; // Retrieve the email parameter
         return MailVerificationScreen(email: email);
       },
-    )
+    ),
+    GetPage(name: login, page: ()=> const LoginScreen()),
   ];
 }

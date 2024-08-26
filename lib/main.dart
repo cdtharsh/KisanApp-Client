@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import ScreenUtil
-import 'package:kisanapp/utils/router/routes.dart';
+import 'package:kisanapp/router/routes.dart';
 import 'utils/theme/theme.dart';
 
 void main() {

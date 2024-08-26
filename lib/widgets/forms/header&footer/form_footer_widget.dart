@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-
 import '../../../constants/sizes.dart';
 
 class FormFooterWidget extends StatelessWidget {
@@ -15,7 +14,7 @@ class FormFooterWidget extends StatelessWidget {
 
   final String btText, accText, opText;
   final VoidCallback onGoogleSignIn;
-  final VoidCallback onAccountTextTap;
+  final VoidCallback onAccountTextTap; // Changed from Future to VoidCallback
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +26,13 @@ class FormFooterWidget extends StatelessWidget {
           width: double.infinity,
           child: OutlinedButton.icon(
             onPressed: onGoogleSignIn,
-            //icon: Logo(Logos.google, size: kButtonHeight),
             icon: Brand(Brands.google, size: kButtonHeight),
             label: Text(btText),
           ),
         ),
         const SizedBox(height: kDefaultSize - 20),
         TextButton(
-          onPressed: onAccountTextTap,
+          onPressed: onAccountTextTap, // Now it's a VoidCallback
           child: Text.rich(
             TextSpan(
               text: accText,

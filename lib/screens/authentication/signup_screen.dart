@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../constants/image_strings.dart';
 import '../../constants/sizes.dart';
@@ -32,8 +33,8 @@ class SignupScreen extends StatelessWidget {
                 btText: kSignUpWithGoogle,
                 accText: kAlreadyHaveAnAccount,
                 opText: kLogin,
-                onAccountTextTap: () {
-                  //Get.toNamed(AppRoutes.login); // Navigate to login screen
+                onAccountTextTap: () async{
+                  Get.toNamed('/login'); // Navigate to login screen
                 },
                 onGoogleSignIn: () {},
               ),

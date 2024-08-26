@@ -86,7 +86,7 @@ class WelcomeScreen extends StatelessWidget {
                       child: OutlinedButton(
                         style: Theme.of(context).outlinedButtonTheme.style,
                         onPressed: () {
-                          // Get.toNamed(AppRoutes.login);
+                          Get.toNamed('/login');
                         },
                         child: AutoSizeText(
                           kLogin.toUpperCase(),
