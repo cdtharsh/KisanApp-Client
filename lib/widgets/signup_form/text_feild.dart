@@ -33,7 +33,7 @@ class CommonTextField extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
-            offset: const Offset(1, 5), // Shifts shadow downward
+            offset: const Offset(1, 3), // Shifts shadow downward
             blurRadius: 25, // Slightly blurs the shadow
             spreadRadius: 0, // Ensures the shadow does not spread on all sides
           ),

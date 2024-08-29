@@ -61,4 +61,30 @@ class AuthApiService {
       };
     }
   }
+
+  Future<Map<String, dynamic>> login({
+    required String username,
+    required String password,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    final responseBody = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      // Adjusted the status code check
+      return {'success': true, 'msg': responseBody['msg']};
+    } else {
+      return {
+        'success': false,
+        'error': responseBody['error'] ?? 'An error occurred'
+      };
+    }
+  }
 }

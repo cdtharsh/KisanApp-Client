@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controller/authentication/fade_in_animation_controller.dart';
+import '../../controller/animation/fade_in_animation_controller.dart';
 import 'fade_in_animation_model.dart';
 class KFadeInAnimation extends StatelessWidget {
   KFadeInAnimation({

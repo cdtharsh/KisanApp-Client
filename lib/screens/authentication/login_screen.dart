@@ -29,14 +29,15 @@ class LoginScreen extends StatelessWidget {
                   size: height * 0.2,
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
-                const LoginForm(),
+                LoginForm(),
                 FormFooterWidget(
                   btText: kSignInWithGoogle,
                   accText: kDontHaveAccount,
                   opText: kSignup,
                   onGoogleSignIn: () {}, // Add your Google Sign-In logic here
                   onAccountTextTap: () async {
-                    await Get.toNamed('/signup'); // Replace with your actual route
+                    await Get.toNamed(
+                        '/signup'); // Replace with your actual route
                   },
                 ),
               ],
