@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:kisanapp/constants/sizes.dart';
 import 'package:kisanapp/constants/text_strings.dart';
-import 'package:kisanapp/controller/authentication/login_controller.dart';
 
 class LoginForm extends StatelessWidget {
-  LoginForm({super.key});
-
-  final LoginController _loginController = Get.put(LoginController());
+  const LoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController usernameController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    bool isLoading = false;
+
     return Form(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: kFormHeight - 10),
@@ -19,7 +19,7 @@ class LoginForm extends StatelessWidget {
           children: [
             // Username field
             TextFormField(
-              controller: _loginController.usernameController,
+              controller: usernameController,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.person_outline_outlined),
                 labelText: kEmail,
@@ -31,7 +31,7 @@ class LoginForm extends StatelessWidget {
 
             // Password field
             TextFormField(
-              controller: _loginController.passwordController,
+              controller: passwordController,
               obscureText: true, // Hide password text
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.fingerprint),
@@ -57,24 +57,18 @@ class LoginForm extends StatelessWidget {
             // Login button with loading indicator
             SizedBox(
               width: double.infinity,
-              child: ValueListenableBuilder<bool>(
-                valueListenable: _loginController.isLoading,
-                builder: (context, isLoading, child) {
-                  return ElevatedButton(
-                    onPressed: isLoading
-                        ? null
-                        : () {
-                            // Trigger the login process
-                            _loginController.login();
-                          },
-                    child: isLoading
-                        ? const CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          )
-                        : Text(kLogin.toUpperCase()),
-                  );
-                },
+              child: ElevatedButton(
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        // Trigger the login process
+                        // Implement your login logic here
+                      },
+                child: isLoading
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : Text(kLogin.toUpperCase()),
               ),
             ),
           ],

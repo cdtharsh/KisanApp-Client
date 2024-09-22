@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import '../../constants/sizes.dart';
 import '../../constants/text_strings.dart';
-import '../../controller/authentication/mail.dart';
 
 class MailVerificationScreen extends StatelessWidget {
   final String email;
@@ -12,8 +11,6 @@ class MailVerificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(MailVerificationController(email));
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -46,13 +43,17 @@ class MailVerificationScreen extends StatelessWidget {
               SizedBox(
                 width: 200,
                 child: OutlinedButton(
-                  onPressed: () => controller.manuallyCheckEmailVerificationStatus(),
+                  onPressed: () {
+                    // Implement manual check for email verification status here
+                  },
                   child: Text(kContinue.tr),
                 ),
               ),
               const SizedBox(height: kDefaultSize * 2),
               TextButton(
-                onPressed: () => controller.sendVerificationEmail(),
+                onPressed: () {
+                  // Implement logic to resend verification email here
+                },
                 child: Text(kResendEmail.tr),
               ),
               TextButton(

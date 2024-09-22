@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
                   size: height * 0.2,
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
-                LoginForm(),
+                const LoginForm(),
                 FormFooterWidget(
                   btText: kSignInWithGoogle,
                   accText: kDontHaveAccount,
