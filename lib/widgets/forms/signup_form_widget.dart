@@ -1,41 +1,35 @@
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:validators/validators.dart' as validators;
-
+import 'package:phone_form_field/phone_form_field.dart';
 import '../../constants/sizes.dart';
 import '../../constants/text_strings.dart';
+import '../../controller/authentication/signup_controller.dart';
 import '../signup_form/text_feild.dart';
+import '../../validator/validator.dart';
 
-class SignupFormWidget extends StatelessWidget {
+class SignupFormWidget extends StatefulWidget {
   const SignupFormWidget({super.key});
 
   @override
+  SignupFormWidgetState createState() => SignupFormWidgetState();
+}
+
+class SignupFormWidgetState extends State<SignupFormWidget> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final controllers = SignupControllers();
+
+  @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-    final TextEditingController usernameController = TextEditingController();
-    final TextEditingController firstNameController = TextEditingController();
-    final TextEditingController lastNameController = TextEditingController();
-    final TextEditingController mobileController = TextEditingController();
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController streetAddressController =
-        TextEditingController();
-    final TextEditingController postalCodeController = TextEditingController();
-    final TextEditingController countryController = TextEditingController();
-    final TextEditingController stateController = TextEditingController();
-    final TextEditingController cityController = TextEditingController();
-
     return Form(
       key: formKey,
       child: Padding(
-        padding: EdgeInsets.all(8.w),
+        padding: const EdgeInsets.all(8.0), // Adjust padding without ScreenUtil
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             CommonTextField(
-              controller: usernameController,
+              controller: controllers.usernameController,
               prefixIcon:
                   const Icon(Clarity.user_line, color: Colors.redAccent),
               hintText: kUserName,
@@ -43,205 +37,152 @@ class SignupFormWidget extends StatelessWidget {
               obscureText: false,
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.done,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your username';
-                }
-                return null;
-              },
+              validator: (value) => CustomValidator.validateField(
+                  value, 'Please enter your username'),
             ),
             const SizedBox(height: kFormHeight),
             CommonTextField(
-              controller: firstNameController,
+              controller: controllers.firstNameController,
               hintText: kFirstName,
               labelText: kFirstName,
               prefixIcon:
                   const Icon(MingCute.user_1_fill, color: Colors.redAccent),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your first name';
-                }
-                return null;
-              },
+              validator: (value) => CustomValidator.validateField(
+                  value, 'Please enter your first name'),
             ),
             const SizedBox(height: kFormHeight),
             CommonTextField(
-              controller: lastNameController,
+              controller: controllers.lastNameController,
               hintText: kLastName,
               labelText: kLastName,
               prefixIcon:
                   const Icon(MingCute.user_2_fill, color: Colors.redAccent),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your last name';
-                }
-                return null;
-              },
+              validator: (value) => CustomValidator.validateField(
+                  value, 'Please enter your last name'),
             ),
             const SizedBox(height: kFormHeight),
-            CommonTextField(
-              controller: mobileController,
-              hintText: kPhone,
-              labelText: kPhone,
-              prefixIcon: const Icon(Icons.call, color: Colors.redAccent),
-              keyboardType: TextInputType.phone,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a valid phone number';
-                }
-                return null;
-              },
+
+            // Phone Field with custom validation
+            PhoneFormField(
+              controller: controllers.mobileController,
+              decoration: InputDecoration(
+                labelText: 'Phone',
+                prefixIcon: const Icon(Icons.call, color: Colors.redAccent),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              validator:
+                  CustomValidator.getPhoneValidator(context, mobileOnly: true),
+              countrySelectorNavigator:
+                  const CountrySelectorNavigator.bottomSheet(),
+              isCountryButtonPersistent: true,
+              autofocus: true,
             ),
+
             const SizedBox(height: kFormHeight),
             CommonTextField(
-              controller: emailController,
+              controller: controllers.emailController,
               hintText: kEmail,
               labelText: kEmail,
               prefixIcon: const Icon(Icons.email, color: Colors.redAccent),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your email address';
-                } else if (!validators.isEmail(value)) {
-                  return 'Please enter a valid email address';
-                }
-                return null;
-              },
+              validator: (value) => CustomValidator.validateField(
+                  value, 'Please enter your email address'),
             ),
             const SizedBox(height: kFormHeight),
             CommonTextField(
-              controller: passwordController,
+              controller: controllers.passwordController,
               hintText: kPass,
               labelText: kPass,
               prefixIcon: const Icon(Icons.lock, color: Colors.redAccent),
               obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
-                }
-                return null;
+              validator: (value) => CustomValidator.validateField(
+                  value, 'Please enter your password'),
+            ),
+            const SizedBox(height: kFormHeight),
+            // CSC Picker for Country, State, and City
+            CSCPicker(
+              showStates: true,
+              showCities: true,
+              dropdownDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                border: Border.all(color: Colors.grey.shade300, width: 1),
+              ),
+              disabledDropdownDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey.shade300,
+                border: Border.all(color: Colors.grey.shade300, width: 1),
+              ),
+              defaultCountry: CscCountry.India,
+              countrySearchPlaceholder: "Country",
+              stateSearchPlaceholder: "State",
+              citySearchPlaceholder: "City",
+              countryDropdownLabel: "Country",
+              stateDropdownLabel: "State",
+              cityDropdownLabel: "City",
+
+              // When country is changed
+              onCountryChanged: (value) {
+                setState(() {
+                  controllers.countryValue = value; // Store the country name
+                  controllers
+                      .updateAddress(); // Update the address whenever the country changes
+                });
+              },
+
+              // When state is changed
+              onStateChanged: (value) {
+                setState(() {
+                  controllers.stateValue =
+                      value ?? ""; // Ensure value is not null
+                  controllers
+                      .updateAddress(); // Update the address whenever the state changes
+                });
+              },
+
+              // When city is changed
+              onCityChanged: (value) {
+                setState(() {
+                  controllers.cityValue =
+                      value ?? ""; // Ensure value is not null
+                  controllers
+                      .updateAddress(); // Update the address whenever the city changes
+                });
               },
             ),
             const SizedBox(height: kFormHeight),
+
             CommonTextField(
-              controller: streetAddressController,
+              controller: controllers.streetAddressController,
               hintText: kStreetAddress,
               labelText: kStreetAddress,
               prefixIcon:
                   const Icon(Icons.location_on, color: Colors.redAccent),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your street address';
-                }
-                return null;
-              },
+              validator: (value) => CustomValidator.validateField(
+                  value, 'Please enter your street address'),
             ),
+
             const SizedBox(height: kFormHeight),
+
+            // Postal Code TextField
             CommonTextField(
-              controller: postalCodeController,
+              controller: controllers.postalCodeController,
               hintText: kPostalCode,
               labelText: kPostalCode,
               prefixIcon: const Icon(Icons.pin, color: Colors.redAccent),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your postal code';
-                }
-                return null;
-              },
+              validator: (value) => CustomValidator.validateField(
+                  value, 'Please enter your postal code'),
             ),
             const SizedBox(height: kFormHeight),
-            DropdownButtonFormField<String>(
-              value: countryController.text.isNotEmpty
-                  ? countryController.text
-                  : null,
-              decoration: InputDecoration(
-                labelText: 'Country',
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.surface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-              items: ['India', 'USA', 'Canada']
-                  .map((country) => DropdownMenuItem<String>(
-                        value: country,
-                        child: Text(country),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                countryController.text = value ?? '';
-                stateController.clear();
-                cityController.clear();
-              },
-              validator: (value) {
-                if (value == null) {
-                  return 'Please select a country';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: kFormHeight),
-            DropdownButtonFormField<String>(
-              value:
-                  stateController.text.isNotEmpty ? stateController.text : null,
-              decoration: InputDecoration(
-                labelText: 'State',
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.surface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-              items: ['State 1', 'State 2', 'State 3']
-                  .map((state) => DropdownMenuItem<String>(
-                        value: state,
-                        child: Text(state),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                stateController.text = value ?? '';
-                cityController.clear();
-              },
-              validator: (value) {
-                if (value == null) {
-                  return 'Please select a state';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: kFormHeight),
-            DropdownButtonFormField<String>(
-              value:
-                  cityController.text.isNotEmpty ? cityController.text : null,
-              decoration: InputDecoration(
-                labelText: 'City',
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.surface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-              items: ['City 1', 'City 2', 'City 3']
-                  .map((city) => DropdownMenuItem<String>(
-                        value: city,
-                        child: Text(city),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                cityController.text = value ?? '';
-              },
-              validator: (value) {
-                if (value == null) {
-                  return 'Please select a city';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: kFormHeight),
+
+            // Submit Button
             ElevatedButton(
               onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  // Handle registration logic here
-                }
+                // Update and print the full address
+                controllers.updateAddress();
+                controllers.register();
+                // Proceed with signup logic
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
