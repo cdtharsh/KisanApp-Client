@@ -51,7 +51,7 @@ class CustomSnackbar {
   }) {
     // If backgroundColor has no opacity (i.e., its opacity is 1), apply opacity here
     if (backgroundColor.opacity == 1.0) {
-      backgroundColor = backgroundColor.withOpacity(0.1); // default opacity
+      backgroundColor = backgroundColor.withOpacity(0.5); // default opacity
     }
 
     String extractedMessage = message ?? _extractErrorMessage(error);
