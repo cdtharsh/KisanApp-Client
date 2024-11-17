@@ -45,24 +45,19 @@ class LoginFormState extends State<LoginForm> {
             message: response['msg'] ?? 'Welcome!',
             backgroundColor: Colors.green,
             iconData: Icons.check_circle,
-            error: null, // No error should be passed in the success case
           );
           Get.offAllNamed(AppRoutes.home);
         }
-        return; // Return to avoid falling into the catch block for success
+        return; // Return here to ensure success doesn't fall into error block
       }
     } catch (e) {
       if (mounted) {
-        // Extract the error message from the exception and show it
-        String errorMessage = CustomSnackbar.extractErrorMessage(e);
-
-        // Show the error message in the Snackbar
+        // Show the extracted error message in the Snackbar automatically
         CustomSnackbar.show(
           title: 'Login Failed',
-          message: errorMessage,
           backgroundColor: Colors.red,
           iconData: Icons.error,
-          error: e, // Pass the error here for error handling
+          error: e, // Pass the error here, CustomSnackbar will handle it
         );
       }
     } finally {

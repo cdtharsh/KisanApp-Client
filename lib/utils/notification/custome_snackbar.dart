@@ -1,13 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../constants/colors.dart';
 
 class CustomSnackbar {
   // Function to extract the error message from the exception
-  static String extractErrorMessage(dynamic e) {
+  static String _extractErrorMessage(dynamic e) {
     String errorMessage = 'An error occurred, please try again later.';
 
     try {
@@ -50,14 +47,13 @@ class CustomSnackbar {
     Color backgroundColor = kSnakbarBgGreen,
     IconData? iconData,
     VoidCallback? onPressed,
-    String? message, // Make message optional for error handling
+    String? message,
   }) {
-    // If the message is null or empty, use the extracted error message
-    message ??= extractErrorMessage(error);
+    String extractedMessage = message ?? _extractErrorMessage(error);
 
     Get.snackbar(
       title,
-      message,
+      extractedMessage,
       duration: const Duration(seconds: 3),
       snackPosition: SnackPosition.TOP,
       backgroundColor: backgroundColor,
