@@ -1,72 +1,128 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kisanapp/constants/sizes.dart';
 import 'package:kisanapp/constants/text_strings.dart';
+import 'package:kisanapp/router/routes.dart';
+import '../../../controller/authentication/login_controller.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController usernameController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    bool isLoading = false;
+  LoginFormState createState() => LoginFormState();
+}
 
+class LoginFormState extends State<LoginForm> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final LoginController loginController = LoginController();
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await loginController.handleLogin(
+        usernameController.text,
+        passwordController.text,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response['msg'])),
+        );
+        Get.offAllNamed(AppRoutes.home);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('HTTP Exception: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      loginController.togglePasswordVisibility();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Form(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: kFormHeight - 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Username field
             TextFormField(
               controller: usernameController,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.person_outline_outlined),
-                labelText: kEmail,
-                hintText: kEmail,
+                labelText: kUserName,
+                hintText: kUserName,
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: kFormHeight - 20),
-
-            // Password field
             TextFormField(
               controller: passwordController,
-              obscureText: true, // Hide password text
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.fingerprint),
+              obscureText: !loginController.isPasswordVisible,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.fingerprint),
                 labelText: kPass,
                 hintText: kPass,
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.remove_red_eye_sharp),
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    loginController.isPasswordVisible
+                        ? Icons.visibility_off_sharp
+                        : Icons.remove_red_eye_sharp,
+                  ),
+                  onPressed: _togglePasswordVisibility,
+                ),
               ),
             ),
             const SizedBox(height: kFormHeight - 20),
-
-            // Forgot password link
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  // Handle forgot password logic here
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Forgot Password Pressed')),
+                  );
                 },
                 child: const Text(kForgetPass),
               ),
             ),
-
-            // Login button with loading indicator
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: isLoading
-                    ? null
-                    : () {
-                        // Trigger the login process
-                        // Implement your login logic here
-                      },
+                onPressed: isLoading ? null : _handleLogin,
                 child: isLoading
-                    ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
                       )
                     : Text(kLogin.toUpperCase()),
               ),

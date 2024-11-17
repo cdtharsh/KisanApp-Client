@@ -27,6 +27,6 @@ class AppRoutes {
         return MailVerificationScreen(email: email);
       },
     ),
-    GetPage(name: login, page: ()=> const LoginScreen()),
+    GetPage(name: login, page: () => const LoginScreen()),
   ];
 }

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 class AuthApiService {
   final String baseUrl = 'https://api.kisanwale.in';
 
+  // Register User
   Future<Map<String, dynamic>> registerUser({
     required String username,
     required String password,
@@ -14,27 +15,60 @@ class AuthApiService {
     required String address,
   }) async {
     final url = Uri.parse('$baseUrl/register');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'username': username,
+          'password': password,
+          'email': email,
+          'mobile': mobile,
+          'firstName': firstName,
+          'lastName': lastName,
+          'address': address,
+        }),
+      );
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'username': username,
-        'password': password,
-        'email': email,
-        'mobile': mobile,
-        'firstName': firstName,
-        'lastName': lastName,
-        'address': address,
-      }),
-    );
+      // Check for a successful response
+      if (response.statusCode == 201) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to register user: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error during registration: $e');
+    }
+  }
 
-    if (response.statusCode == 201) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to register user: ${response.body}');
+  // Login User
+  Future<Map<String, dynamic>> loginUser({
+    required String username,
+    required String password,
+  }) async {
+    final url = Uri.parse('$baseUrl/login');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'username': username,
+          'password': password,
+        }),
+      );
+
+      // Check for a successful response
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to login: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error during login: $e');
     }
   }
 }

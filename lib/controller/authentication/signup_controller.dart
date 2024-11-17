@@ -39,23 +39,7 @@ class SignupControllers {
             .trim();
   }
 
-  Future<void> register() async {
-    try {
-      final response = await authApiService.registerUser(
-        username: usernameController.text,
-        password: passwordController.text,
-        email: emailController.text,
-        mobile: formattedMobileNumber(mobileController.value),
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
-        address: address,
-      );
-
-      print(response['msg']); // Handle the success response
-    } catch (e) {
-      print('Registration failed: $e'); // Handle the error
-    }
-  }
+  Future<void> register() async {}
 
   void dispose() {
     usernameController.dispose();
