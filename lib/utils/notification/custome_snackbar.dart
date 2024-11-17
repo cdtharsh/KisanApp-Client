@@ -44,11 +44,16 @@ class CustomSnackbar {
   static void show({
     dynamic error,
     required String title,
-    Color backgroundColor = kSnakbarBgGreen,
+    Color backgroundColor = kSnakbarBgGreen, // default color
     IconData? iconData,
     VoidCallback? onPressed,
     String? message,
   }) {
+    // If backgroundColor has no opacity (i.e., its opacity is 1), apply opacity here
+    if (backgroundColor.opacity == 1.0) {
+      backgroundColor = backgroundColor.withOpacity(0.1); // default opacity
+    }
+
     String extractedMessage = message ?? _extractErrorMessage(error);
 
     Get.snackbar(
@@ -56,7 +61,8 @@ class CustomSnackbar {
       extractedMessage,
       duration: const Duration(seconds: 3),
       snackPosition: SnackPosition.TOP,
-      backgroundColor: backgroundColor,
+      backgroundColor:
+          backgroundColor, // Use the passed opacity (or default one)
       colorText: Colors.white,
       borderRadius: 20.0,
       margin: const EdgeInsets.all(20.0),
