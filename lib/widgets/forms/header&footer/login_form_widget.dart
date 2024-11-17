@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kisanapp/constants/sizes.dart';
 import 'package:kisanapp/constants/text_strings.dart';
 import 'package:kisanapp/router/routes.dart';
+import 'package:kisanapp/utils/notification/custome_snackbar.dart';
 import '../../../controller/authentication/login_controller.dart';
 
 class LoginForm extends StatefulWidget {
@@ -36,16 +37,32 @@ class LoginFormState extends State<LoginForm> {
         passwordController.text,
       );
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response['msg'])),
-        );
-        Get.offAllNamed(AppRoutes.home);
+      // If login is successful, show success message and navigate away
+      if (response['msg'] != null) {
+        if (mounted) {
+          CustomSnackbar.show(
+            title: 'Login Successful',
+            message: response['msg'] ?? 'Welcome!',
+            backgroundColor: Colors.green,
+            iconData: Icons.check_circle,
+            error: null, // No error should be passed in the success case
+          );
+          Get.offAllNamed(AppRoutes.home);
+        }
+        return; // Return to avoid falling into the catch block for success
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('HTTP Exception: $e')),
+        // Extract the error message from the exception and show it
+        String errorMessage = CustomSnackbar.extractErrorMessage(e);
+
+        // Show the error message in the Snackbar
+        CustomSnackbar.show(
+          title: 'Login Failed',
+          message: errorMessage,
+          backgroundColor: Colors.red,
+          iconData: Icons.error,
+          error: e, // Pass the error here for error handling
         );
       }
     } finally {
