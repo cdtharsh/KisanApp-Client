@@ -43,8 +43,7 @@ class LoginFormState extends State<LoginForm> {
           CustomSnackbar.show(
             title: 'Login Successful',
             message: response['msg'] ?? 'Welcome!',
-            backgroundColor:
-                Colors.green.withOpacity(0.1), // Custom opacity here
+            backgroundColor: Colors.green, // Custom opacity here
             iconData: Icons.check_circle,
           );
           Get.offAllNamed(AppRoutes.home);
@@ -56,8 +55,7 @@ class LoginFormState extends State<LoginForm> {
         // Show the extracted error message in the Snackbar automatically
         CustomSnackbar.show(
           title: 'Login Failed',
-          backgroundColor:
-              Colors.red.withOpacity(0.1), // Custom opacity for error
+          backgroundColor: Colors.red, // Custom opacity for error
           iconData: Icons.error,
           error: e, // Pass the error here, CustomSnackbar will handle it
         );
