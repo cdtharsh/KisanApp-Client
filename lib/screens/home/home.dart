@@ -1,11 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-
-import '../startup/welcome_screen.dart';
+import '../../controller/authentication/logout_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  final box = GetStorage();
   late Timer _timer;
   int _remainingSeconds = 0;
 
@@ -49,27 +44,22 @@ class HomeScreenState extends State<HomeScreen> {
                 _remainingSeconds--;
               } else {
                 _timer.cancel();
-                _logout();
+                logout();
               }
             });
           });
         } else {
           // Token already expired
-          _logout();
+          logout();
         }
       } catch (e) {
         // Handle invalid token
-        _logout();
+        logout();
       }
     } else {
       // No token found
-      _logout();
+      logout();
     }
-  }
-
-  void _logout() {
-    box.remove('token');
-    Get.offAll(() => const WelcomeScreen());
   }
 
   @override
@@ -82,10 +72,10 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home"),
-        actions: [
+        actions: const [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
+            icon: Icon(Icons.logout),
+            onPressed: logout,
           ),
         ],
       ),

@@ -6,7 +6,7 @@ import 'package:kisanapp/constants/text_strings.dart';
 import 'package:kisanapp/router/routes.dart';
 import 'package:kisanapp/utils/notification/custome_snackbar.dart';
 import '../../../controller/authentication/login_controller.dart';
-import '../../../controller/authentication/login_data_controller.dart';
+import '../../../controller/data/login_data_controller.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

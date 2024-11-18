@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import ScreenUtil
 import 'package:get_storage/get_storage.dart';
-import 'package:kisanapp/controller/authentication/login_data_controller.dart';
+import 'package:kisanapp/controller/data/login_data_controller.dart';
 import 'package:kisanapp/router/routes.dart';
 import 'utils/theme/theme.dart';
 
