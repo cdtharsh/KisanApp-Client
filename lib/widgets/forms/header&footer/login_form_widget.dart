@@ -41,12 +41,10 @@ class LoginFormState extends State<LoginForm> {
 
       // If login is successful, store the token and navigate
       if (response['msg'] != null) {
-        // Store the token and user details in GetStorage
         final box = GetStorage();
-        box.write('token', response['token']); // Save token to storage
-        box.write('user', response['user']); // Save user info if needed
+        box.write('token', response['token']);
+        box.write('user', response['user']);
 
-        // Store the login data in the UserController
         Get.find<UserController>().setLoginData(
           response['msg'],
           response['token'],
@@ -60,7 +58,7 @@ class LoginFormState extends State<LoginForm> {
             backgroundColor: Colors.green,
             iconData: Icons.check_circle,
           );
-          Get.offAllNamed(AppRoutes.home); // Navigate to home
+          Get.offAllNamed(AppRoutes.home);
         }
         return;
       }
