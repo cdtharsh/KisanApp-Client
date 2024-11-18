@@ -105,7 +105,12 @@ class WelcomeScreen extends StatelessWidget {
                         child: AutoSizeText(
                           kSignup.toUpperCase(),
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: isDark? kSecondaryColor:kWhiteColor),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  color:
+                                      isDark ? kSecondaryColor : kWhiteColor),
                         ),
                       ),
                     ),

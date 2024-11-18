@@ -1,14 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import ScreenUtil
+import 'package:kisanapp/controller/animation/fade_in_animation_controller.dart';
+import 'package:kisanapp/constants/colors.dart';
+import 'package:kisanapp/constants/image_strings.dart';
+import 'package:kisanapp/constants/text_strings.dart';
 
 import '../../widgets/fade_in_animation/animation_widget.dart';
-import '../../controller/animation/fade_in_animation_controller.dart';
 import '../../widgets/fade_in_animation/fade_in_animation_model.dart';
-import '../../constants/colors.dart';
-import '../../constants/image_strings.dart';
-import '../../constants/text_strings.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -33,27 +33,24 @@ class SplashScreen extends StatelessWidget {
               durationInMs: 2000,
               animate: KAnimatePosition(
                 topBefore: sHeight,
-                topAfter: sHeight *
-                    0.1, // Align vertically at 10% of the screen height
+                topAfter: sHeight * 0.1,
                 leftBefore: -sWidth,
-                leftAfter: sWidth / 2, // Align horizontally without offset
+                leftAfter: sWidth / 2,
               ),
               child: Align(
                 alignment: Alignment.topCenter,
                 child: FractionalTranslation(
-                  translation: const Offset(-0.5,
-                      0), // Shift left by 50% of its width to center the content
+                  translation: const Offset(-0.5, 0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        height: 0.35.sh, // Responsive height
-                        width: 0.8.sw, // Responsive width
+                        height: 0.35.sh,
+                        width: 0.8.sw,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                              25), // Adjust the radius as needed
+                          borderRadius: BorderRadius.circular(25),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -65,18 +62,14 @@ class SplashScreen extends StatelessWidget {
                               textAlign: TextAlign.center,
                               maxLines: 1,
                             ),
-                            SizedBox(
-                                height:
-                                    8.h), // Vertical spacing between the texts
+                            SizedBox(height: 8.h),
                             AutoSizeText(
                               kAppTagLine,
                               style: Theme.of(context).textTheme.titleSmall!,
                               textAlign: TextAlign.center,
                               maxLines: 2,
                             ),
-                            SizedBox(
-                              height: 8.h,
-                            ),
+                            SizedBox(height: 8.h),
                           ],
                         ),
                       ),
@@ -85,23 +78,21 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // SizedBox between the first and second animation
-            // Second animationa
+            // Second animation
             KFadeInAnimation(
               durationInMs: 2000,
               animate: KAnimatePosition(
                 topBefore: sHeight,
-                topAfter: sHeight / 2 -
-                    0.5.sh / 2, // Align vertically based on specified height
+                topAfter: sHeight / 2 - 0.5.sh / 2,
                 leftBefore: sWidth,
-                leftAfter: sWidth / 2 - 1.sw / 2, // Align center horizontally
+                leftAfter: sWidth / 2 - 1.sw / 2,
               ),
               child: SizedBox(
-                height: 0.5.sh, // Responsive height
-                width: 1.sw, // Responsive width
+                height: 0.5.sh,
+                width: 1.sw,
                 child: const Image(
                   image: AssetImage(kSplashLogo),
-                  fit: BoxFit.contain, // Ensure image scales properly
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -115,8 +106,8 @@ class SplashScreen extends StatelessWidget {
                 rightAfter: sWidth * 0.1,
               ),
               child: Container(
-                width: 0.1.sw, // Responsive width
-                height: 0.1.sh, // Responsive height to maintain circular shape
+                width: 0.1.sw,
+                height: 0.1.sh,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: kPrimaryColor,

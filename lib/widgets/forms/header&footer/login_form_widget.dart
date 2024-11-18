@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:kisanapp/constants/sizes.dart';
 import 'package:kisanapp/constants/text_strings.dart';
 import 'package:kisanapp/router/routes.dart';
 import 'package:kisanapp/utils/notification/custome_snackbar.dart';
 import '../../../controller/authentication/login_controller.dart';
+import '../../../controller/authentication/login_data_controller.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -37,27 +39,38 @@ class LoginFormState extends State<LoginForm> {
         passwordController.text,
       );
 
-      // If login is successful, show success message and navigate away
+      // If login is successful, store the token and navigate
       if (response['msg'] != null) {
+        // Store the token and user details in GetStorage
+        final box = GetStorage();
+        box.write('token', response['token']); // Save token to storage
+        box.write('user', response['user']); // Save user info if needed
+
+        // Store the login data in the UserController
+        Get.find<UserController>().setLoginData(
+          response['msg'],
+          response['token'],
+          response['user'],
+        );
+
         if (mounted) {
           CustomSnackbar.show(
             title: 'Login Successful',
             message: response['msg'] ?? 'Welcome!',
-            backgroundColor: Colors.green, // Custom opacity here
+            backgroundColor: Colors.green,
             iconData: Icons.check_circle,
           );
-          Get.offAllNamed(AppRoutes.home);
+          Get.offAllNamed(AppRoutes.home); // Navigate to home
         }
-        return; // Return here to ensure success doesn't fall into error block
+        return;
       }
     } catch (e) {
       if (mounted) {
-        // Show the extracted error message in the Snackbar automatically
         CustomSnackbar.show(
           title: 'Login Failed',
-          backgroundColor: Colors.red, // Custom opacity for error
+          backgroundColor: Colors.red,
           iconData: Icons.error,
-          error: e, // Pass the error here, CustomSnackbar will handle it
+          error: e,
         );
       }
     } finally {
