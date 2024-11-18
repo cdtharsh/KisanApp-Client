@@ -5,7 +5,7 @@ import 'package:kisanapp/constants/sizes.dart';
 import 'package:kisanapp/constants/text_strings.dart';
 import 'package:kisanapp/widgets/forms/header&footer/form_footer_widget.dart';
 import 'package:kisanapp/widgets/forms/header&footer/form_header_widget.dart';
-import 'package:kisanapp/widgets/forms/header&footer/login_form_widget.dart';
+import 'package:kisanapp/widgets/forms/login_form_widget.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
