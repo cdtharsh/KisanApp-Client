@@ -12,55 +12,57 @@ class MailVerificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: kDefaultSize * 5,
-            left: kDefaultSize,
-            right: kDefaultSize,
-            bottom: kDefaultSize * 2,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                LineAwesome.envelope_open,
-                size: 100,
-              ),
-              const SizedBox(height: kDefaultSize * 2),
-              Text(
-                kEmailVerificationTitle.tr,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: kDefaultSize),
-              Text(
-                kEmailVerificationSubTitle.tr,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: kDefaultSize * 2),
-              SizedBox(
-                width: 200,
-                child: OutlinedButton(
-                  onPressed: () {
-                    // Implement manual check for email verification status here
-                  },
-                  child: Text(kContinue.tr),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: kDefaultSize * 5,
+              left: kDefaultSize,
+              right: kDefaultSize,
+              bottom: kDefaultSize * 2,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  LineAwesome.envelope_open,
+                  size: 100,
                 ),
-              ),
-              const SizedBox(height: kDefaultSize * 2),
-              TextButton(
-                onPressed: () {
-                  // Implement logic to resend verification email here
-                },
-                child: Text(kResendEmail.tr),
-              ),
-              TextButton(
-                onPressed: () => Get.back(),
-                child: const Text('Back'),
-              ),
-            ],
+                const SizedBox(height: kDefaultSize * 2),
+                Text(
+                  kEmailVerificationTitle.tr,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: kDefaultSize),
+                Text(
+                  kEmailVerificationSubTitle.tr,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: kDefaultSize * 2),
+                SizedBox(
+                  width: 200,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // Implement manual check for email verification status here
+                    },
+                    child: Text(kContinue.tr),
+                  ),
+                ),
+                const SizedBox(height: kDefaultSize * 2),
+                TextButton(
+                  onPressed: () {
+                    // Implement logic to resend verification email here
+                  },
+                  child: Text(kResendEmail.tr),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: const Text('Back'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
