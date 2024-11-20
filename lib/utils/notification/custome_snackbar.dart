@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants/colors.dart';
+import '../../router/routes.dart'; // Ensure your routes file is imported
 
 class CustomSnackbar {
   // Function to extract the error message from the exception
@@ -40,29 +41,59 @@ class CustomSnackbar {
     return errorMessage; // Default fallback message
   }
 
-  // Function to show snackbar with the extracted error message
+  // Function to show snackbar with extracted error message
   static void show({
     dynamic error,
     required String title,
-    Color backgroundColor = kSnakbarBgGreen, // default color
+    Color backgroundColor = kSnakbarBgGreen, // Default color
     IconData? iconData,
     VoidCallback? onPressed,
     String? message,
   }) {
-    // If backgroundColor has no opacity (i.e., its opacity is 1), apply opacity here
+    // Ensure backgroundColor has proper opacity
     if (backgroundColor.opacity == 1.0) {
-      backgroundColor = backgroundColor.withOpacity(0.5); // default opacity
+      backgroundColor = backgroundColor.withOpacity(0.5);
     }
 
     String extractedMessage = message ?? _extractErrorMessage(error);
 
+    // Check for specific error message
+    if (extractedMessage ==
+        "Email not verified. A new verification email has been sent to your email address.") {
+      Get.snackbar(
+        title,
+        extractedMessage,
+        duration: const Duration(seconds: 3),
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: backgroundColor,
+        colorText: Colors.white,
+        borderRadius: 20.0,
+        margin: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+        isDismissible: true,
+        dismissDirection: DismissDirection.horizontal,
+        forwardAnimationCurve: Curves.easeInOut,
+        reverseAnimationCurve: Curves.easeIn,
+        animationDuration: const Duration(milliseconds: 500),
+        snackStyle: SnackStyle.FLOATING,
+        icon: iconData != null
+            ? Icon(iconData, color: Colors.white, size: 28.0)
+            : null,
+        onTap: (_) {
+          // Navigate to the email verification page
+          Get.toNamed(AppRoutes.email);
+        },
+      );
+      return;
+    }
+
+    // Default snackbar for other error messages
     Get.snackbar(
       title,
       extractedMessage,
       duration: const Duration(seconds: 3),
       snackPosition: SnackPosition.TOP,
-      backgroundColor:
-          backgroundColor, // Use the passed opacity (or default one)
+      backgroundColor: backgroundColor,
       colorText: Colors.white,
       borderRadius: 20.0,
       margin: const EdgeInsets.all(20.0),
@@ -76,12 +107,6 @@ class CustomSnackbar {
       icon: iconData != null
           ? Icon(iconData, color: Colors.white, size: 28.0)
           : null,
-      shouldIconPulse: true,
-      snackbarStatus: (status) {
-        if (status == SnackbarStatus.CLOSING) {
-          // Handle snackbar closing if needed
-        }
-      },
     );
   }
 }
