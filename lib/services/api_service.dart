@@ -73,8 +73,9 @@ class AuthApiService {
   }
 
   // Check Email Verification
-  Future<Map<String, dynamic>> checkEmailVerification(String email) async {
-    final url = Uri.parse('$baseUrl/check-email-verification?email=$email');
+  Future<Map<String, dynamic>> checkEmailVerification(String username) async {
+    final url =
+        Uri.parse('$baseUrl/check-email-verification?username=$username');
     try {
       final response = await http.get(
         url,
