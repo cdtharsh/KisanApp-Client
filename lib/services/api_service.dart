@@ -71,4 +71,25 @@ class AuthApiService {
       throw Exception('Error during login: $e');
     }
   }
+
+  // Check Email Verification
+  Future<Map<String, dynamic>> checkEmailVerification(String email) async {
+    final url = Uri.parse('$baseUrl/check-email-verification?email=$email');
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to check email verification: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error during email verification check: $e');
+    }
+  }
 }
