@@ -47,7 +47,6 @@ class CustomSnackbar {
     required String title,
     Color backgroundColor = kSnakbarBgGreen, // Default color
     IconData? iconData,
-    VoidCallback? onPressed,
     String? message,
   }) {
     // Ensure backgroundColor has proper opacity
@@ -60,6 +59,10 @@ class CustomSnackbar {
     // Check for specific error message
     if (extractedMessage ==
         "Email not verified. A new verification email has been sent to your email address.") {
+      // Navigate to the email verification page immediately
+      Get.toNamed(AppRoutes.email);
+
+      // Display the snackbar
       Get.snackbar(
         title,
         extractedMessage,
@@ -79,11 +82,8 @@ class CustomSnackbar {
         icon: iconData != null
             ? Icon(iconData, color: Colors.white, size: 28.0)
             : null,
-        onTap: (_) {
-          // Navigate to the email verification page
-          Get.toNamed(AppRoutes.email);
-        },
       );
+
       return;
     }
 
