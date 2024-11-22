@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:kisanapp/screens/startup/welcome_screen.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:kisanapp/screens/startup/welcome_screen.dart'; // For navigation
 
 class LogoutController extends GetxController {
-  Timer? _timer; // Timer to manage session expiration
-  int _remainingSeconds = 0; // Track remaining session time
-  RxBool isLoggedOut = false.obs; // Flag to track the logout state
-  GetStorage box = GetStorage();
+  final box = GetStorage();
+  late Timer _timer;
+  var remainingSeconds = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -17,11 +17,10 @@ class LogoutController extends GetxController {
 
   @override
   void onClose() {
-    _timer?.cancel(); // Safely cancel the timer if it's initialized
+    _timer.cancel();
     super.onClose();
   }
 
-  // Function to start the timer
   void _startTimer() {
     final token = box.read<String?>('token');
 
@@ -31,60 +30,33 @@ class LogoutController extends GetxController {
         final expirationTime =
             DateTime.fromMillisecondsSinceEpoch(jwt.payload['exp'] * 1000);
         final currentTime = DateTime.now();
-        _remainingSeconds = expirationTime.difference(currentTime).inSeconds;
+        remainingSeconds.value =
+            expirationTime.difference(currentTime).inSeconds;
 
-        if (_remainingSeconds > 0) {
+        if (remainingSeconds.value > 0) {
           _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-            if (_remainingSeconds > 0) {
-              _remainingSeconds--;
+            if (remainingSeconds.value > 0) {
+              remainingSeconds.value--;
             } else {
-              _timer?.cancel();
-              logout(); // Logout when session expires
+              _timer.cancel();
+              logout();
             }
-            update(); // Trigger UI update
           });
         } else {
-          // Token already expired, manually logout
-          logout();
+          logout(); // Token expired
         }
       } catch (e) {
-        // Handle invalid token or decoding error
-        logout();
+        logout(); // Invalid token
       }
     } else {
-      // No token found, logout
-      logout();
+      logout(); // No token found
     }
   }
 
-  // Async logout function
-  Future<void> logout() async {
-    try {
-      // Perform any necessary cleanup before logging out
-      await Future.delayed(
-          const Duration(milliseconds: 500)); // Simulate async operation
-
-      // Remove the token and user data from storage
-      await box.remove('token');
-      await box.remove('user');
-
-      // Set logout flag
-      isLoggedOut.value = true;
-
-      // Navigate to the Welcome screen
-      Get.offAll(() => const WelcomeScreen());
-    } catch (e) {
-      // Handle any errors during logout (optional)
-      print("Error during logout: $e");
-    }
-  }
-
-  // Getters for remaining time
-  String get remainingTime {
-    final hours = (_remainingSeconds ~/ 3600).toString().padLeft(2, '0');
-    final minutes =
-        ((_remainingSeconds % 3600) ~/ 60).toString().padLeft(2, '0');
-    final seconds = (_remainingSeconds % 60).toString().padLeft(2, '0');
-    return "$hours:$minutes:$seconds";
+  // Function to handle logout
+  void logout() {
+    box.remove('token');
+    box.remove('username');
+    Get.offAll(() => const WelcomeScreen());
   }
 }

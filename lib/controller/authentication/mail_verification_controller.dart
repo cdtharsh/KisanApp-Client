@@ -89,6 +89,7 @@ class MailVerificationController extends GetxController {
         final box = GetStorage();
         box.write('token', response['token']);
         box.write('user', response['user']);
+        _stopTimer();
         CustomSnackbar.show(
           title: 'Login Successful',
           message: response['msg'] ?? 'Welcome!',
@@ -105,8 +106,6 @@ class MailVerificationController extends GetxController {
         backgroundColor: Colors.red,
         iconData: Icons.error,
       );
-
-      // Don't call logout automatically, this is removed
     }
   }
 
