@@ -42,26 +42,11 @@ class MailVerificationScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: kDefaultSize),
-                Obx(() {
-                  // Update UI based on email verification status
-                  if (controller.isLoading.value) {
-                    return const CircularProgressIndicator();
-                  }
-
-                  if (controller.isEmailVerified.value) {
-                    return Text(
-                      'Your email is verified. You can continue.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    );
-                  } else {
-                    return Text(
-                      kEmailVerificationSubTitle.tr,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    );
-                  }
-                }),
+                Text(
+                  kEmailVerificationSubTitle.tr,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 const SizedBox(height: kDefaultSize * 2),
                 SizedBox(
                   width: 200,

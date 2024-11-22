@@ -113,13 +113,21 @@ class LoginFormState extends State<LoginForm> {
               ),
             ),
             const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerRight,
+              child:
+                  TextButton(onPressed: () {}, child: const Text(kForgetPass)),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: isLoading ? null : _handleLogin,
                 child: isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Login'),
+                    ? const CircularProgressIndicator.adaptive()
+                    : Text(kLogin.toUpperCase()),
               ),
             ),
           ],
