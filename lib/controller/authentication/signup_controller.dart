@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
-import '../../services/api_service.dart';
+import '../../services/auth_api_service.dart';
 
 class SignupControllers {
   final TextEditingController usernameController = TextEditingController();

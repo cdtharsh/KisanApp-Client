@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:kisanapp/constants/sizes.dart';
-import 'package:kisanapp/constants/text_strings.dart';
-import 'package:kisanapp/router/routes.dart';
-import 'package:kisanapp/utils/notification/custome_snackbar.dart';
 import '../../controller/authentication/login_controller.dart';
-import '../../controller/data/login_data_controller.dart';
+import '../../constants/text_strings.dart';
+import '../../router/routes.dart';
+import '../../utils/notification/custome_snackbar.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -39,44 +37,37 @@ class LoginFormState extends State<LoginForm> {
         passwordController.text,
       );
 
-      // If login is successful, store the token and navigate
-      if (response['msg'] != null) {
+      // If login is successful and email is verified, proceed
+      if (response['token'] != null) {
         final box = GetStorage();
         box.write('token', response['token']);
         box.write('user', response['user']);
 
-        Get.find<UserController>().setLoginData(
-          response['msg'],
-          response['token'],
-          response['user'],
+        CustomSnackbar.show(
+          title: 'Login Successful',
+          message: response['msg'] ?? 'Welcome!',
+          backgroundColor: Colors.green,
+          iconData: Icons.check_circle,
         );
-
-        if (mounted) {
-          CustomSnackbar.show(
-            title: 'Login Successful',
-            message: response['msg'] ?? 'Welcome!',
-            backgroundColor: Colors.green,
-            iconData: Icons.check_circle,
-          );
-          Get.offAllNamed(AppRoutes.home);
-        }
-        return;
+        Get.offAllNamed(AppRoutes.home);
       }
     } catch (e) {
-      if (mounted) {
+      if (e.toString().contains('Email is not verified')) {
+        // Redirect to email verification screen
+        Get.toNamed(AppRoutes.email);
+      } else {
+        // Handle other errors
         CustomSnackbar.show(
           title: 'Login Failed',
+          error: e,
           backgroundColor: Colors.red,
           iconData: Icons.error,
-          error: e,
         );
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -90,9 +81,8 @@ class LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Form(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: kFormHeight - 10),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
               controller: usernameController,
@@ -103,7 +93,7 @@ class LoginFormState extends State<LoginForm> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: kFormHeight - 20),
+            const SizedBox(height: 16),
             TextFormField(
               controller: passwordController,
               obscureText: !loginController.isPasswordVisible,
@@ -115,14 +105,14 @@ class LoginFormState extends State<LoginForm> {
                 suffixIcon: IconButton(
                   icon: Icon(
                     loginController.isPasswordVisible
-                        ? Icons.visibility_off_sharp
-                        : Icons.remove_red_eye_sharp,
+                        ? Icons.visibility_off
+                        : Icons.visibility,
                   ),
                   onPressed: _togglePasswordVisibility,
                 ),
               ),
             ),
-            const SizedBox(height: kFormHeight - 20),
+            const SizedBox(height: 16),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
@@ -139,13 +129,8 @@ class LoginFormState extends State<LoginForm> {
               child: ElevatedButton(
                 onPressed: isLoading ? null : _handleLogin,
                 child: isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       )
                     : Text(kLogin.toUpperCase()),
               ),
