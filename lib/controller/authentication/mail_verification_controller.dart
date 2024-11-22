@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'package:get/get.dart';
 import 'package:kisanapp/services/auth_api_service.dart';
 
 class MailVerificationController extends GetxController {
   var isEmailVerified = false.obs;
   var isLoading = false.obs;
-
   final String username;
+  Timer? _timer;
+  int _attempts = 0;
 
   MailVerificationController({required this.username});
 
@@ -22,12 +24,18 @@ class MailVerificationController extends GetxController {
       final response = await AuthApiService().checkEmailVerification(username);
       if (response['isEmailVerified']) {
         isEmailVerified(true);
+        _stopTimer(); // Stop timer if email is verified
       } else {
         isEmailVerified(false);
+        _attempts++;
+        if (_attempts < 5) {
+          _startTimer(); // Retry after 10 seconds if not verified
+        }
       }
     } catch (e) {
       isEmailVerified(false);
       // Handle error or show message if needed
+      _stopTimer(); // Stop timer in case of error
     } finally {
       isLoading(false);
     }
@@ -36,6 +44,24 @@ class MailVerificationController extends GetxController {
   // Manual check for email verification status
   Future<void> checkVerificationManually() async {
     await _checkEmailVerificationStatus();
+  }
+
+  // Start a timer to check the verification status every 10 seconds for a maximum of 5 times
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (_attempts < 5) {
+        _checkEmailVerificationStatus();
+      } else {
+        _stopTimer(); // Stop timer after 5 attempts
+      }
+    });
+  }
+
+  // Stop the timer when no longer needed
+  void _stopTimer() {
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
+    }
   }
 
   // Resend verification email
