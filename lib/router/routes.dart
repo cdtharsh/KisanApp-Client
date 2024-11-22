@@ -22,8 +22,7 @@ class AppRoutes {
     GetPage(
       name: email,
       page: () {
-        final username =
-            Get.parameters['username'] ?? ''; // Retrieve the email parameter
+        final username = Get.parameters['username'] ?? '';
         final password = Get.parameters['password'] ?? '';
         return MailVerificationScreen(
           username: username,

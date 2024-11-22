@@ -45,4 +45,9 @@ class AuthApiService extends ApiServiceBase {
   Future<Map<String, dynamic>> checkEmailVerification(String username) async {
     return await get('check-email-verification?username=$username');
   }
+
+  //resend Email verification mail
+  Future<Map<String, dynamic>> resendVerificationEmail(String username) async {
+    return await post('resend-verification-email?username=$username', body: {});
+  }
 }

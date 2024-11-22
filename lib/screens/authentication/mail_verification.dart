@@ -71,10 +71,10 @@ class MailVerificationScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: kDefaultSize * 2),
-                // TextButton(
-                //   onPressed: controller.resendVerificationEmail,
-                //   child: Text(kResendEmail.tr),
-                // ),
+                TextButton(
+                  onPressed: controller.resendVerificationEmail,
+                  child: Text(kResendEmail.tr),
+                ),
                 TextButton(
                   onPressed: () => Get.back(),
                   child: const Text('Back'),

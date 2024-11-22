@@ -109,16 +109,17 @@ class MailVerificationController extends GetxController {
     }
   }
 
-  // Resend verification email (optional functionality)
-  // Future<void> resendVerificationEmail() async {
-  //   try {
-  //     isLoading(true);
-  //     await AuthApiService().resendVerificationEmail(email); // API to resend email
-  //     Get.snackbar('Email Sent', 'Verification email has been resent.');
-  //   } catch (e) {
-  //     Get.snackbar('Error', 'Failed to resend verification email.');
-  //   } finally {
-  //     isLoading(false);
-  //   }
-  // }
+  //Resend verification email (optional functionality)
+  Future<void> resendVerificationEmail() async {
+    try {
+      isLoading(true);
+      await AuthApiService()
+          .resendVerificationEmail(username); // API to resend email
+      Get.snackbar('Email Sent', 'Verification email has been resent.');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to resend verification email.');
+    } finally {
+      isLoading(false);
+    }
+  }
 }

@@ -113,11 +113,14 @@ class LoginFormState extends State<LoginForm> {
               ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: isLoading ? null : _handleLogin,
-              child: isLoading
-                  ? const CircularProgressIndicator()
-                  : const Text('Login'),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : _handleLogin,
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text('Login'),
+              ),
             ),
           ],
         ),
