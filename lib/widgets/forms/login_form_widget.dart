@@ -37,7 +37,6 @@ class LoginFormState extends State<LoginForm> {
         passwordController.text,
       );
 
-      // If login is successful and email is verified, proceed
       if (response['token'] != null) {
         final box = GetStorage();
         box.write('token', response['token']);
@@ -53,12 +52,11 @@ class LoginFormState extends State<LoginForm> {
       }
     } catch (e) {
       if (e.toString().contains('Email is not verified')) {
-        // Redirect to email verification screen and pass the username
         Get.toNamed(AppRoutes.email, parameters: {
           'username': usernameController.text,
+          'password': passwordController.text,
         });
       } else {
-        // Handle other errors
         CustomSnackbar.show(
           title: 'Login Failed',
           error: e,
@@ -115,27 +113,11 @@ class LoginFormState extends State<LoginForm> {
               ),
             ),
             const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Forgot Password Pressed')),
-                  );
-                },
-                child: const Text(kForgetPass),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: isLoading ? null : _handleLogin,
-                child: isLoading
-                    ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      )
-                    : Text(kLogin.toUpperCase()),
-              ),
+            ElevatedButton(
+              onPressed: isLoading ? null : _handleLogin,
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Login'),
             ),
           ],
         ),

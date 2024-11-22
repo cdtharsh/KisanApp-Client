@@ -24,8 +24,10 @@ class AppRoutes {
       page: () {
         final username =
             Get.parameters['username'] ?? ''; // Retrieve the email parameter
+        final password = Get.parameters['password'] ?? '';
         return MailVerificationScreen(
           username: username,
+          password: password,
         );
       },
     ),

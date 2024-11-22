@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-import '../../controller/authentication/logout_controller.dart';
+import 'package:get_storage/get_storage.dart'; // Assuming you're using GetStorage
+import 'package:get/get.dart';
+import 'package:kisanapp/screens/startup/welcome_screen.dart'; // For navigation
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   late Timer _timer;
   int _remainingSeconds = 0;
+  final box = GetStorage();
 
   @override
   void initState() {
@@ -38,28 +41,37 @@ class HomeScreenState extends State<HomeScreen> {
         _remainingSeconds = expirationTime.difference(currentTime).inSeconds;
 
         if (_remainingSeconds > 0) {
+          // Only update the UI when needed
           _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-            setState(() {
-              if (_remainingSeconds > 0) {
+            if (_remainingSeconds > 0) {
+              setState(() {
                 _remainingSeconds--;
-              } else {
-                _timer.cancel();
-                logout();
-              }
-            });
+              });
+            } else {
+              _timer.cancel();
+              // Handle token expiration logic here if needed
+            }
           });
         } else {
           // Token already expired
-          logout();
+          // Handle token expiration logic here if needed
         }
       } catch (e) {
-        // Handle invalid token
-        logout();
+        // Handle invalid token and handle expiration logic
       }
     } else {
       // No token found
-      logout();
+      // Handle logic when no token is available
     }
+  }
+
+  // Function to handle logout
+  void _logout() {
+    // Remove the token from GetStorage
+    box.remove('token');
+    box.remove('username');
+    // Redirect to the welcome or login screen
+    Get.offAll(() => const WelcomeScreen());
   }
 
   @override
@@ -72,10 +84,10 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home"),
-        actions: const [
+        actions: [
           IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: logout,
+            icon: const Icon(Icons.logout),
+            onPressed: _logout, // Call the _logout function on button press
           ),
         ],
       ),

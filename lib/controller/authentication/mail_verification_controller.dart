@@ -1,6 +1,13 @@
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kisanapp/services/auth_api_service.dart';
+import 'package:get_storage/get_storage.dart';
+
+import '../../router/routes.dart';
+import '../../services/auth_api_service.dart';
+import '../../utils/notification/custome_snackbar.dart';
+import 'login_controller.dart';
 
 class MailVerificationController extends GetxController {
   var isEmailVerified = false.obs;
@@ -9,7 +16,10 @@ class MailVerificationController extends GetxController {
   Timer? _timer;
   int _attempts = 0;
 
-  MailVerificationController({required this.username});
+  // Store login credentials
+  final String password;
+
+  MailVerificationController({required this.username, required this.password});
 
   @override
   void onInit() {
@@ -25,6 +35,9 @@ class MailVerificationController extends GetxController {
       if (response['isEmailVerified']) {
         isEmailVerified(true);
         _stopTimer(); // Stop timer if email is verified
+
+        // If email is verified, automatically log the user in
+        _autoLogin(username, password);
       } else {
         isEmailVerified(false);
         _attempts++;
@@ -64,7 +77,40 @@ class MailVerificationController extends GetxController {
     }
   }
 
-  // Resend verification email
+  // Auto login after email verification
+  Future<void> _autoLogin(String username, String password) async {
+    try {
+      // Call the login function from the LoginController
+      final loginController = LoginController();
+      final response = await loginController.handleLogin(username, password);
+
+      // If login is successful
+      if (response['token'] != null) {
+        final box = GetStorage();
+        box.write('token', response['token']);
+        box.write('user', response['user']);
+        CustomSnackbar.show(
+          title: 'Login Successful',
+          message: response['msg'] ?? 'Welcome!',
+          backgroundColor: Colors.green,
+          iconData: Icons.check_circle,
+        );
+        Get.offAllNamed(AppRoutes.home); // Navigate to home screen
+      }
+    } catch (e) {
+      // Handle auto-login failure (e.g., show error message)
+      CustomSnackbar.show(
+        title: 'Login Failed',
+        error: e,
+        backgroundColor: Colors.red,
+        iconData: Icons.error,
+      );
+
+      // Don't call logout automatically, this is removed
+    }
+  }
+
+  // Resend verification email (optional functionality)
   // Future<void> resendVerificationEmail() async {
   //   try {
   //     isLoading(true);

@@ -7,14 +7,16 @@ import '../../controller/authentication/mail_verification_controller.dart';
 
 class MailVerificationScreen extends StatelessWidget {
   final String username;
+  final String password;
 
-  const MailVerificationScreen({super.key, required this.username});
+  const MailVerificationScreen(
+      {super.key, required this.username, required this.password});
 
   @override
   Widget build(BuildContext context) {
     // Initialize the controller
-    final MailVerificationController controller =
-        Get.put(MailVerificationController(username: username));
+    final MailVerificationController controller = Get.put(
+        MailVerificationController(username: username, password: password));
 
     return Scaffold(
       body: Center(
