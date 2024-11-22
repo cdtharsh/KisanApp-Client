@@ -53,8 +53,10 @@ class LoginFormState extends State<LoginForm> {
       }
     } catch (e) {
       if (e.toString().contains('Email is not verified')) {
-        // Redirect to email verification screen
-        Get.toNamed(AppRoutes.email);
+        // Redirect to email verification screen and pass the username
+        Get.toNamed(AppRoutes.email, parameters: {
+          'username': usernameController.text,
+        });
       } else {
         // Handle other errors
         CustomSnackbar.show(

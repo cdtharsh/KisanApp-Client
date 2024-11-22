@@ -22,9 +22,11 @@ class AppRoutes {
     GetPage(
       name: email,
       page: () {
-        final email =
-            Get.parameters['email'] ?? ''; // Retrieve the email parameter
-        return MailVerificationScreen(email: email);
+        final username =
+            Get.parameters['username'] ?? ''; // Retrieve the email parameter
+        return MailVerificationScreen(
+          username: username,
+        );
       },
     ),
     GetPage(name: login, page: () => const LoginScreen()),

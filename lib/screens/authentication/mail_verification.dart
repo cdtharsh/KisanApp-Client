@@ -3,14 +3,19 @@ import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import '../../constants/sizes.dart';
 import '../../constants/text_strings.dart';
+import '../../controller/authentication/mail_verification_controller.dart';
 
 class MailVerificationScreen extends StatelessWidget {
-  final String email;
+  final String username;
 
-  const MailVerificationScreen({super.key, required this.email});
+  const MailVerificationScreen({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
+    // Initialize the controller
+    final MailVerificationController controller =
+        Get.put(MailVerificationController(username: username));
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -35,28 +40,39 @@ class MailVerificationScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: kDefaultSize),
-                Text(
-                  kEmailVerificationSubTitle.tr,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+                Obx(() {
+                  // Update UI based on email verification status
+                  if (controller.isLoading.value) {
+                    return const CircularProgressIndicator();
+                  }
+
+                  if (controller.isEmailVerified.value) {
+                    return Text(
+                      'Your email is verified. You can continue.',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    );
+                  } else {
+                    return Text(
+                      kEmailVerificationSubTitle.tr,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    );
+                  }
+                }),
                 const SizedBox(height: kDefaultSize * 2),
                 SizedBox(
                   width: 200,
                   child: OutlinedButton(
-                    onPressed: () {
-                      // Implement manual check for email verification status here
-                    },
+                    onPressed: controller.checkVerificationManually,
                     child: Text(kContinue.tr),
                   ),
                 ),
                 const SizedBox(height: kDefaultSize * 2),
-                TextButton(
-                  onPressed: () {
-                    // Implement logic to resend verification email here
-                  },
-                  child: Text(kResendEmail.tr),
-                ),
+                // TextButton(
+                //   onPressed: controller.resendVerificationEmail,
+                //   child: Text(kResendEmail.tr),
+                // ),
                 TextButton(
                   onPressed: () => Get.back(),
                   child: const Text('Back'),
