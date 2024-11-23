@@ -89,13 +89,13 @@ class MailVerificationController extends GetxController {
         final box = GetStorage();
         box.write('token', response['token']);
         box.write('user', response['user']);
-        _stopTimer();
         CustomSnackbar.show(
           title: 'Login Successful',
           message: response['msg'] ?? 'Welcome!',
           backgroundColor: Colors.green,
           iconData: Icons.check_circle,
         );
+        _stopTimer();
         Get.offAllNamed(AppRoutes.home); // Navigate to home screen
       }
     } catch (e) {

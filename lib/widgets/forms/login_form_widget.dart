@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:kisanapp/screens/authentication/email_input_screen.dart';
+import 'package:kisanapp/widgets/common/forget_card.dart';
 import '../../controller/authentication/login_controller.dart';
 import '../../constants/text_strings.dart';
 import '../../router/routes.dart';
@@ -77,6 +79,37 @@ class LoginFormState extends State<LoginForm> {
     });
   }
 
+  void _showForgetPasswordSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomCard(
+                title: kResetViaEmail,
+                subtitle: kForgetMailSubTitle,
+                leading: const Icon(Icons.email, size: 40, color: Colors.blue),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  // Handle email reset logic or navigate to the next screen
+                  Navigator.pop(context);
+                  Get.to(() =>
+                      EnterEmailScreen()); // Passing a flag to indicate email
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -115,12 +148,12 @@ class LoginFormState extends State<LoginForm> {
             const SizedBox(height: 16),
             Align(
               alignment: Alignment.centerRight,
-              child:
-                  TextButton(onPressed: () {}, child: const Text(kForgetPass)),
+              child: TextButton(
+                onPressed: () => _showForgetPasswordSheet(context),
+                child: const Text(kForgetPass),
+              ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

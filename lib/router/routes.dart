@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:kisanapp/screens/authentication/email_input_screen.dart';
+import 'package:kisanapp/screens/authentication/otp_screen.dart';
 import 'package:kisanapp/screens/authentication/login_screen.dart';
 import 'package:kisanapp/screens/authentication/mail_verification.dart';
 import 'package:kisanapp/screens/authentication/signup_screen.dart';
@@ -13,6 +15,8 @@ class AppRoutes {
   static const String home = '/home';
   static const String email = '/email';
   static const String login = '/login';
+  static const String inputEmail = '/inputEmail';
+  static const String otp = '/otp';
 
   static List<GetPage> routes = [
     GetPage(name: splash, page: () => const SplashScreen()),
@@ -31,5 +35,7 @@ class AppRoutes {
       },
     ),
     GetPage(name: login, page: () => const LoginScreen()),
+    GetPage(name: inputEmail, page: () => EnterEmailScreen()),
+    GetPage(name: otp, page: () => OTPScreen()),
   ];
 }
