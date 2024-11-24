@@ -62,11 +62,6 @@ class OTPScreenState extends State<OTPScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          "Verify OTP",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
