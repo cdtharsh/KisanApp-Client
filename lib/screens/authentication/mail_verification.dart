@@ -14,9 +14,9 @@ class MailVerificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize the controller
     final MailVerificationController controller = Get.put(
-        MailVerificationController(username: username, password: password));
+      MailVerificationController(username: username, password: password),
+    );
 
     return Scaffold(
       body: Center(

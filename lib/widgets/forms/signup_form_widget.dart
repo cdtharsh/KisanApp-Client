@@ -24,7 +24,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
     return Form(
       key: formKey,
       child: Padding(
-        padding: const EdgeInsets.all(8.0), // Adjust padding without ScreenUtil
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -79,7 +79,6 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
               isCountryButtonPersistent: true,
               autofocus: true,
             ),
-
             const SizedBox(height: kFormHeight),
             CommonTextField(
               controller: controllers.emailController,
@@ -125,29 +124,24 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
               // When country is changed
               onCountryChanged: (value) {
                 setState(() {
-                  controllers.countryValue = value; // Store the country name
-                  controllers
-                      .updateAddress(); // Update the address whenever the country changes
+                  controllers.countryValue = value;
+                  controllers.updateAddress();
                 });
               },
 
               // When state is changed
               onStateChanged: (value) {
                 setState(() {
-                  controllers.stateValue =
-                      value ?? ""; // Ensure value is not null
-                  controllers
-                      .updateAddress(); // Update the address whenever the state changes
+                  controllers.stateValue = value ?? "";
+                  controllers.updateAddress();
                 });
               },
 
               // When city is changed
               onCityChanged: (value) {
                 setState(() {
-                  controllers.cityValue =
-                      value ?? ""; // Ensure value is not null
-                  controllers
-                      .updateAddress(); // Update the address whenever the city changes
+                  controllers.cityValue = value ?? "";
+                  controllers.updateAddress();
                 });
               },
             ),
@@ -181,7 +175,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
               onPressed: () {
                 // Update and print the full address
                 controllers.updateAddress();
-                controllers.register();
+                controllers.handleRegister();
                 // Proceed with signup logic
               },
               style: ElevatedButton.styleFrom(

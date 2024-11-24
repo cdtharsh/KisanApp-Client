@@ -3,20 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:kisanapp/services/auth_api_service.dart';
 
 import '../../router/routes.dart';
-import '../../services/auth_api_service.dart';
 import '../../utils/notification/custome_snackbar.dart';
 import 'login_controller.dart';
 
 class MailVerificationController extends GetxController {
   var isEmailVerified = false.obs;
   var isLoading = false.obs;
+  var isLoggedIn = false.obs; // Add this flag
   final String username;
   Timer? _timer;
   int _attempts = 0;
-
-  // Store login credentials
   final String password;
 
   MailVerificationController({required this.username, required this.password});
@@ -24,30 +23,29 @@ class MailVerificationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _checkEmailVerificationStatus(); // Automatically check status on init
+    _checkEmailVerificationStatus();
   }
 
   // Automatic check for email verification status
   Future<void> _checkEmailVerificationStatus() async {
+    if (isLoggedIn.value) return; // Prevent further checks if logged in
+
     try {
       isLoading(true);
       final response = await AuthApiService().checkEmailVerification(username);
       if (response['isEmailVerified']) {
         isEmailVerified(true);
-        _stopTimer(); // Stop timer if email is verified
-
-        // If email is verified, automatically log the user in
+        _stopTimer();
         _autoLogin(username, password);
       } else {
         isEmailVerified(false);
         _attempts++;
         if (_attempts < 5) {
-          _startTimer(); // Retry after 10 seconds if not verified
+          _startTimer();
         }
       }
     } catch (e) {
       isEmailVerified(false);
-      // Handle error or show message if needed
       _stopTimer(); // Stop timer in case of error
     } finally {
       isLoading(false);
@@ -56,16 +54,18 @@ class MailVerificationController extends GetxController {
 
   // Manual check for email verification status
   Future<void> checkVerificationManually() async {
-    await _checkEmailVerificationStatus();
+    if (!isLoggedIn.value) {
+      await _checkEmailVerificationStatus();
+    }
   }
 
   // Start a timer to check the verification status every 10 seconds for a maximum of 5 times
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      if (_attempts < 5) {
+      if (_attempts < 5 && !isLoggedIn.value) {
         _checkEmailVerificationStatus();
       } else {
-        _stopTimer(); // Stop timer after 5 attempts
+        _stopTimer();
       }
     });
   }
@@ -80,11 +80,9 @@ class MailVerificationController extends GetxController {
   // Auto login after email verification
   Future<void> _autoLogin(String username, String password) async {
     try {
-      // Call the login function from the LoginController
       final loginController = LoginController();
       final response = await loginController.handleLogin(username, password);
 
-      // If login is successful
       if (response['token'] != null) {
         final box = GetStorage();
         box.write('token', response['token']);
@@ -95,11 +93,11 @@ class MailVerificationController extends GetxController {
           backgroundColor: Colors.green,
           iconData: Icons.check_circle,
         );
+        isLoggedIn.value = true; // Set isLoggedIn to true
         _stopTimer();
         Get.offAllNamed(AppRoutes.home); // Navigate to home screen
       }
     } catch (e) {
-      // Handle auto-login failure (e.g., show error message)
       CustomSnackbar.show(
         title: 'Login Failed',
         error: e,
@@ -109,12 +107,10 @@ class MailVerificationController extends GetxController {
     }
   }
 
-  //Resend verification email (optional functionality)
   Future<void> resendVerificationEmail() async {
     try {
       isLoading(true);
-      await AuthApiService()
-          .resendVerificationEmail(username); // API to resend email
+      await AuthApiService().resendVerificationEmail(username);
       Get.snackbar('Email Sent', 'Verification email has been resent.');
     } catch (e) {
       Get.snackbar('Error', 'Failed to resend verification email.');
