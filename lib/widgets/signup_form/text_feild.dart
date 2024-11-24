@@ -6,6 +6,7 @@ class CommonTextField extends StatelessWidget {
   final String hintText;
   final String labelText;
   final Icon prefixIcon;
+  final Widget? suffixIcon;
   final bool obscureText;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
@@ -21,6 +22,7 @@ class CommonTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
     this.validator,
+    this.suffixIcon,
   });
 
   @override
@@ -83,6 +85,7 @@ class CommonTextField extends StatelessWidget {
           ),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          suffixIcon: suffixIcon,
         ),
         style: theme.textTheme.bodyLarge,
       ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:kisanapp/constants/text_strings.dart';
 import 'package:kisanapp/services/pass_api_service.dart';
+import 'package:kisanapp/utils/notification/custome_snackbar.dart';
 import '../../router/routes.dart';
 import '../../validator/validator.dart';
 import '../../widgets/signup_form/text_feild.dart';
@@ -20,6 +21,7 @@ class EnterEmailScreenState extends State<EnterEmailScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final PassApiService _apiService = PassApiService();
   bool _isLoading = false; // Track the loading status
+  bool _isPasswordVisible = false; // Track password visibility
 
   @override
   void dispose() {
@@ -44,28 +46,25 @@ class EnterEmailScreenState extends State<EnterEmailScreen> {
         });
 
         if (response.containsKey('msg')) {
-          Get.snackbar(
-            'Success',
-            response['msg'],
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
+          CustomSnackbar.show(
+            title: kSuccess,
+            message: response['msg'],
+            iconData: Icons.verified,
           );
 
           Get.toNamed(
             AppRoutes.otp,
-            arguments: {
+            parameters: {
               'email': _emailController.text,
               'password': _passwordController.text,
             },
           );
         } else {
-          Get.snackbar(
-            'Error',
-            'Unexpected server response. Please try again.',
-            snackPosition: SnackPosition.BOTTOM,
+          CustomSnackbar.show(
+            title: kError,
+            message: kSomething,
             backgroundColor: Colors.red,
-            colorText: Colors.white,
+            iconData: Icons.error,
           );
         }
       } catch (error) {
@@ -73,12 +72,11 @@ class EnterEmailScreenState extends State<EnterEmailScreen> {
           _isLoading = false; // Set loading to false if there's an error
         });
 
-        Get.snackbar(
-          'Error',
-          error.toString(),
-          snackPosition: SnackPosition.BOTTOM,
+        CustomSnackbar.show(
+          title: kError,
+          error: error,
           backgroundColor: Colors.red,
-          colorText: Colors.white,
+          iconData: Icons.error,
         );
       }
     }
@@ -133,23 +131,37 @@ class EnterEmailScreenState extends State<EnterEmailScreen> {
                       hintText: 'Enter your new password here',
                       prefixIcon:
                           const Icon(Clarity.lock_line, color: Colors.blue),
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                       keyboardType: TextInputType.text,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
                       validator: (value) {
                         return CustomValidator.validatePassword(
                             value, 'Password is required');
                       },
                     ),
-                    const SizedBox(height: 20.0),
-                    _isLoading
-                        ? CircularProgressIndicator() // Show loading indicator when loading
-                        : SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: _handleSubmit,
-                              child: Text(kSubmit),
-                            ),
-                          ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _handleSubmit,
+                        child: _isLoading
+                            ? const CircularProgressIndicator() // Only show the progress indicator
+                            : const Text(
+                                kSubmit), // Show the text when not loading
+                      ),
+                    ),
                   ],
                 ),
               ),

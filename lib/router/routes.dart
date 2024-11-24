@@ -36,6 +36,15 @@ class AppRoutes {
     ),
     GetPage(name: login, page: () => const LoginScreen()),
     GetPage(name: inputEmail, page: () => EnterEmailScreen()),
-    GetPage(name: otp, page: () => OTPScreen()),
+    GetPage(
+        name: otp,
+        page: () {
+          final email = Get.parameters['email'] ?? '';
+          final password = Get.parameters['password'] ?? '';
+          return OTPScreen(
+            email: email,
+            password: password,
+          );
+        }),
   ];
 }
