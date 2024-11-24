@@ -4,6 +4,7 @@
 .flutter-plugins
 .flutter-plugins-dependencies
 .flutter-versions
+.metadata
 build/
 pubspec.lock
 
