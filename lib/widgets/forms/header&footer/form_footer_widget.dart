@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import '../../../constants/sizes.dart';
 
 class FormFooterWidget extends StatelessWidget {
@@ -26,7 +25,6 @@ class FormFooterWidget extends StatelessWidget {
           width: double.infinity,
           child: OutlinedButton.icon(
             onPressed: onGoogleSignIn,
-            icon: Brand(Brands.google, size: kButtonHeight),
             label: Text(btText),
           ),
         ),

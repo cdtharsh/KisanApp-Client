@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:kisanapp/constants/text_strings.dart';
 import 'package:kisanapp/services/pass_api_service.dart';
 import 'package:kisanapp/utils/notification/custome_snackbar.dart';
@@ -116,8 +115,7 @@ class EnterEmailScreenState extends State<EnterEmailScreen> {
                       controller: _emailController,
                       labelText: 'Email Address',
                       hintText: 'Enter your email here',
-                      prefixIcon:
-                          const Icon(Clarity.email_line, color: Colors.blue),
+                      prefixIcon: const Icon(Icons.email, color: Colors.blue),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         return CustomValidator.validateEmail(
@@ -129,8 +127,7 @@ class EnterEmailScreenState extends State<EnterEmailScreen> {
                       controller: _passwordController,
                       labelText: 'New Password',
                       hintText: 'Enter your new password here',
-                      prefixIcon:
-                          const Icon(Clarity.lock_line, color: Colors.blue),
+                      prefixIcon: const Icon(Icons.lock, color: Colors.blue),
                       obscureText: !_isPasswordVisible,
                       keyboardType: TextInputType.text,
                       suffixIcon: IconButton(

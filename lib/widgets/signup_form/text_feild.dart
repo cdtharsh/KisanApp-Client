@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 
 class CommonTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -15,7 +14,7 @@ class CommonTextField extends StatelessWidget {
   const CommonTextField({
     super.key,
     required this.controller,
-    this.prefixIcon = const Icon(Clarity.user_line),
+    this.prefixIcon = const Icon(Icons.person_2_outlined),
     this.hintText = '',
     this.labelText = '',
     this.obscureText = false,

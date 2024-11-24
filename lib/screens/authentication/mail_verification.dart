@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:icons_plus/icons_plus.dart';
 import '../../constants/sizes.dart';
 import '../../constants/text_strings.dart';
 import '../../controller/authentication/mail_verification_controller.dart';
@@ -33,7 +32,7 @@ class MailVerificationScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(
-                  LineAwesome.envelope_open,
+                  Icons.email,
                   size: 100,
                 ),
                 const SizedBox(height: kDefaultSize * 2),

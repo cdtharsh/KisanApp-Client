@@ -1,6 +1,5 @@
 import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import '../../constants/sizes.dart';
 import '../../constants/text_strings.dart';
@@ -30,8 +29,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
           children: [
             CommonTextField(
               controller: controllers.usernameController,
-              prefixIcon:
-                  const Icon(Clarity.user_line, color: Colors.redAccent),
+              prefixIcon: const Icon(Icons.person, color: Colors.redAccent),
               hintText: kUserName,
               labelText: kUserName,
               obscureText: false,
@@ -45,8 +43,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
               controller: controllers.firstNameController,
               hintText: kFirstName,
               labelText: kFirstName,
-              prefixIcon:
-                  const Icon(MingCute.user_1_fill, color: Colors.redAccent),
+              prefixIcon: const Icon(Icons.person_2, color: Colors.redAccent),
               validator: (value) => CustomValidator.validateField(
                   value, 'Please enter your first name'),
             ),
@@ -55,8 +52,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
               controller: controllers.lastNameController,
               hintText: kLastName,
               labelText: kLastName,
-              prefixIcon:
-                  const Icon(MingCute.user_2_fill, color: Colors.redAccent),
+              prefixIcon: const Icon(Icons.person_3, color: Colors.redAccent),
               validator: (value) => CustomValidator.validateField(
                   value, 'Please enter your last name'),
             ),
