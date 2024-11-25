@@ -19,7 +19,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
   final controllers = SignupControllers();
   bool isLoading = false;
   String? passwordStrengthMessage;
-  List<bool> passwordRequirementsMet = [false, false, false, false];
+  List<bool> passwordRequirementsMet = [false, false, false, false, false];
   bool _isPasswordVisible = false;
   final FocusNode _passwordFocusNode = FocusNode();
 
@@ -40,7 +40,6 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return SingleChildScrollView(
       child: Form(
         key: formKey,
@@ -111,30 +110,25 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                   ),
                 ),
               ),
-              if (passwordStrengthMessage != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    passwordStrengthMessage!,
-                    style: TextStyle(
-                        color: passwordStrengthMessage!.contains("not strong")
-                            ? Colors.orange
-                            : Colors.green),
-                  ),
-                ),
               if (_passwordFocusNode.hasFocus)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildPasswordRequirement(
-                        "At least 8 characters", passwordRequirementsMet[0]),
-                    _buildPasswordRequirement("Contains at least one letter",
+                        "At least 8 characters (e.g., 'abcdefgh')",
+                        passwordRequirementsMet[0]),
+                    _buildPasswordRequirement(
+                        "Contains at least one letter (e.g., 'a')",
                         passwordRequirementsMet[1]),
-                    _buildPasswordRequirement("Contains at least one number",
+                    _buildPasswordRequirement(
+                        "Contains at least one number (e.g., '1')",
                         passwordRequirementsMet[2]),
                     _buildPasswordRequirement(
-                        "Contains at least one special character",
+                        "Contains at least one special character (e.g., @, #, etc.)",
                         passwordRequirementsMet[3]),
+                    _buildPasswordRequirement(
+                        "Contains at least one capital letter (e.g., 'A')",
+                        passwordRequirementsMet[4]),
                   ],
                 ),
               const SizedBox(height: kFieldSpace),
@@ -171,7 +165,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                 controller: controllers.firstNameController,
                 hintText: kFirstName,
                 labelText: kFirstName,
-                prefixIcon: const Icon(Icons.person_2, color: Colors.redAccent),
+                prefixIcon: const Icon(Icons.person, color: Colors.redAccent),
                 validator: (value) => CustomValidator.validateField(
                     value, 'Please enter your first name'),
               ),
@@ -180,7 +174,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                 controller: controllers.lastNameController,
                 hintText: kLastName,
                 labelText: kLastName,
-                prefixIcon: const Icon(Icons.person_3, color: Colors.redAccent),
+                prefixIcon: const Icon(Icons.person, color: Colors.redAccent),
                 validator: (value) => CustomValidator.validateField(
                     value, 'Please enter your last name'),
               ),
@@ -192,6 +186,44 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                 onCountryChanged: (value) => controllers.countryValue = value,
                 onStateChanged: (value) => controllers.stateValue = value ?? '',
                 onCityChanged: (value) => controllers.cityValue = value ?? '',
+                dropdownDecoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      offset: const Offset(1, 3), // Shifts shadow downward
+                      blurRadius: 25, // Slightly blurs the shadow
+                      spreadRadius:
+                          0, // Ensures the shadow does not spread on all sides
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(25.0),
+                  color: theme.colorScheme.surface,
+                  border: Border.all(
+                    color: theme.brightness == Brightness.dark
+                        ? Colors.white60 // Lighter border for dark theme
+                        : Colors.blueAccent, // Blue accent for light theme
+                    width: 1,
+                  ),
+                ),
+                disabledDropdownDecoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      offset: const Offset(1, 3), // Shifts shadow downward
+                      blurRadius: 25, // Slightly blurs the shadow
+                      spreadRadius:
+                          0, // Ensures the shadow does not spread on all sides
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(25.0),
+                  color: theme.colorScheme.surface,
+                  border: Border.all(
+                    color: theme.brightness == Brightness.dark
+                        ? Colors.white60 // Lighter border for dark theme
+                        : Colors.blueAccent, // Blue accent for light theme
+                    width: 1,
+                  ),
+                ),
               ),
               const SizedBox(height: kFieldSpace),
               CommonTextField(
