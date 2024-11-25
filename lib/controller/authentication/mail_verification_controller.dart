@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -12,11 +11,11 @@ import 'login_controller.dart';
 class MailVerificationController extends GetxController {
   var isEmailVerified = false.obs;
   var isLoading = false.obs;
-  var isLoggedIn = false.obs; // Add this flag
+  var isLoggedIn = false.obs;
   final String username;
+  final String password;
   Timer? _timer;
   int _attempts = 0;
-  final String password;
 
   MailVerificationController({required this.username, required this.password});
 
@@ -26,9 +25,8 @@ class MailVerificationController extends GetxController {
     _checkEmailVerificationStatus();
   }
 
-  // Automatic check for email verification status
   Future<void> _checkEmailVerificationStatus() async {
-    if (isLoggedIn.value) return; // Prevent further checks if logged in
+    if (isLoggedIn.value) return;
 
     try {
       isLoading(true);
@@ -36,30 +34,32 @@ class MailVerificationController extends GetxController {
       if (response['isEmailVerified']) {
         isEmailVerified(true);
         _stopTimer();
-        _autoLogin(username, password);
+        await _autoLogin();
       } else {
         isEmailVerified(false);
-        _attempts++;
         if (_attempts < 5) {
+          _attempts++;
           _startTimer();
         }
       }
     } catch (e) {
       isEmailVerified(false);
-      _stopTimer(); // Stop timer in case of error
+      CustomSnackbar.show(
+        title: 'Verification Error',
+        message: 'There was an error verifying your email.',
+        backgroundColor: Colors.red,
+        iconData: Icons.error,
+      );
+      _stopTimer();
     } finally {
       isLoading(false);
     }
   }
 
-  // Manual check for email verification status
   Future<void> checkVerificationManually() async {
-    if (!isLoggedIn.value) {
-      await _checkEmailVerificationStatus();
-    }
+    if (!isLoggedIn.value) await _checkEmailVerificationStatus();
   }
 
-  // Start a timer to check the verification status every 10 seconds for a maximum of 5 times
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       if (_attempts < 5 && !isLoggedIn.value) {
@@ -70,15 +70,11 @@ class MailVerificationController extends GetxController {
     });
   }
 
-  // Stop the timer when no longer needed
   void _stopTimer() {
-    if (_timer != null && _timer!.isActive) {
-      _timer!.cancel();
-    }
+    _timer?.cancel();
   }
 
-  // Auto login after email verification
-  Future<void> _autoLogin(String username, String password) async {
+  Future<void> _autoLogin() async {
     try {
       final loginController = LoginController();
       final response = await loginController.handleLogin(username, password);
@@ -89,13 +85,13 @@ class MailVerificationController extends GetxController {
         box.write('user', response['user']);
         CustomSnackbar.show(
           title: 'Login Successful',
-          message: response['msg'] ?? 'Welcome!',
+          message: 'Welcome!',
           backgroundColor: Colors.green,
           iconData: Icons.check_circle,
         );
-        isLoggedIn.value = true; // Set isLoggedIn to true
+        isLoggedIn.value = true;
         _stopTimer();
-        Get.offAllNamed(AppRoutes.home); // Navigate to home screen
+        Get.offAllNamed(AppRoutes.home);
       }
     } catch (e) {
       CustomSnackbar.show(
@@ -117,5 +113,11 @@ class MailVerificationController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  @override
+  void onClose() {
+    _stopTimer();
+    super.onClose();
   }
 }

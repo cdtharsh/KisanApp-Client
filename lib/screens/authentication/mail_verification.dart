@@ -60,7 +60,11 @@ class MailVerificationScreen extends StatelessWidget {
                   child: Text(kResendEmail.tr),
                 ),
                 TextButton(
-                  onPressed: () => Get.back(),
+                  onPressed: () {
+                    Get.delete<
+                        MailVerificationController>(); // Delete controller
+                    Get.back(); // Navigate back
+                  },
                   child: const Text('Back'),
                 ),
               ],
