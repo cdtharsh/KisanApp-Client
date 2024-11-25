@@ -4,7 +4,7 @@ class CommonTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final String labelText;
-  final Icon prefixIcon;
+  final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool obscureText;
   final TextInputType keyboardType;
