@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 class CustomValidator {
-  /// Validator for phone numbers
-  static PhoneNumberInputValidator? getPhoneValidator(BuildContext context,
-      {required bool mobileOnly}) {
-    List<PhoneNumberInputValidator> validators = [];
-    if (mobileOnly) {
-      validators.add(PhoneValidator.validMobile(context));
-    } else {
-      validators.add(PhoneValidator.valid(context));
-    }
-    return validators.isNotEmpty ? PhoneValidator.compose(validators) : null;
-  }
-
   /// General field validator
   static String? validateField(String? value, String errorMessage) {
     if (value == null || value.isEmpty) {
@@ -25,17 +13,15 @@ class CustomValidator {
   /// Email validator
   static String? validateEmail(String? value, String errorMessage) {
     if (value == null || value.isEmpty) {
-      return errorMessage; // Return error message if the field is empty
+      return errorMessage;
     }
 
-    // Regular expression for validating email
     const emailRegex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-
     if (!RegExp(emailRegex).hasMatch(value)) {
       return 'Please enter a valid email address.';
     }
 
-    return null; // If no errors, return null
+    return null;
   }
 
   /// Password validator
@@ -44,15 +30,47 @@ class CustomValidator {
       return errorMessage;
     }
 
-    // Regular expression for a strong password:
-    // Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number, and one special character.
+    // Password criteria: At least 8 characters, 1 uppercase, 1 lowercase, 1 digit, 1 special char
     const passwordRegex =
         r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$';
-
     if (!RegExp(passwordRegex).hasMatch(value)) {
-      return 'Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.';
+      return 'Password must be at least 8 characters, include an uppercase letter, a number, and a special character.';
     }
 
-    return null; // If no errors, return null
+    return null;
+  }
+
+  /// Confirm Password validator
+  static String? validateConfirmPassword(String? value, String password) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password';
+    }
+    if (value != password) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
+  /// Password requirements checker
+  static List<bool> checkPasswordRequirements(String value) {
+    List<bool> requirementsMet = [
+      value.length >= 8,
+      RegExp(r'[A-Za-z]').hasMatch(value),
+      RegExp(r'[0-9]').hasMatch(value),
+      RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value),
+    ];
+    return requirementsMet;
+  }
+
+  /// Phone number validator
+  static PhoneNumberInputValidator? getPhoneValidator(BuildContext context,
+      {required bool mobileOnly}) {
+    List<PhoneNumberInputValidator> validators = [];
+    if (mobileOnly) {
+      validators.add(PhoneValidator.validMobile(context));
+    } else {
+      validators.add(PhoneValidator.valid(context));
+    }
+    return validators.isNotEmpty ? PhoneValidator.compose(validators) : null;
   }
 }

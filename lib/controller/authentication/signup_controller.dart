@@ -12,12 +12,13 @@ class SignupControllers {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final TextEditingController streetAddressController = TextEditingController();
   final TextEditingController postalCodeController = TextEditingController();
   final PhoneController mobileController = PhoneController(
       initialValue: const PhoneNumber(isoCode: IsoCode.IN, nsn: ''));
 
-  // Store country, state, and city values for Country Picker
   String countryValue = "";
   String stateValue = "";
   String cityValue = "";
@@ -25,13 +26,11 @@ class SignupControllers {
 
   final AuthApiService authApiService = AuthApiService();
 
-  // Helper method to format the mobile number
   String formattedMobileNumber(PhoneNumber phoneNumber) {
     return '+${phoneNumber.countryCode}${phoneNumber.nsn}';
   }
 
   void updateAddress() {
-    // Construct the full address string without the country flag
     address =
         "${streetAddressController.text.isNotEmpty ? streetAddressController.text : ''},"
                 "${cityValue.isNotEmpty ? cityValue : ''},"
@@ -43,7 +42,6 @@ class SignupControllers {
   }
 
   Future<Map<String, dynamic>> handleRegister() async {
-    // Get the formatted mobile number
     String mobileNumber = formattedMobileNumber(mobileController.value);
 
     try {
@@ -57,7 +55,6 @@ class SignupControllers {
         address: address.trim(),
       );
 
-      // Check for specific conditions like email verification
       if (response['msg'] ==
           'User registered successfully. Please verify your email.') {
         CustomSnackbar.show(

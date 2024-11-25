@@ -18,6 +18,24 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final controllers = SignupControllers();
   bool isLoading = false;
+  String? passwordStrengthMessage;
+  List<bool> passwordRequirementsMet = [false, false, false, false];
+  bool _isPasswordVisible = false;
+  final FocusNode _passwordFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordFocusNode.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +49,6 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Username
               CommonTextField(
                 controller: controllers.usernameController,
                 prefixIcon: Padding(
@@ -44,13 +61,10 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                 obscureText: false,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter your username'
-                    : null,
+                validator: (value) => CustomValidator.validateField(
+                    value, 'Please enter your username'),
               ),
-              const SizedBox(height: kFormHeight),
-
-              // Email
+              const SizedBox(height: kFieldSpace),
               CommonTextField(
                 controller: controllers.emailController,
                 hintText: kEmail,
@@ -59,21 +73,85 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                 validator: (value) => CustomValidator.validateEmail(
                     value, 'Please enter a valid email address'),
               ),
-              const SizedBox(height: kFormHeight),
-
-              // Password
+              const SizedBox(height: kFieldSpace),
               CommonTextField(
                 controller: controllers.passwordController,
+                focusNode: _passwordFocusNode,
                 hintText: kPass,
                 labelText: kPass,
                 prefixIcon: const Icon(Icons.lock, color: Colors.redAccent),
-                obscureText: true,
-                validator: (value) => CustomValidator.validatePassword(
-                    value, 'Please enter a valid password'),
+                obscureText: !_isPasswordVisible,
+                onChanged: (value) {
+                  setState(() {
+                    passwordRequirementsMet =
+                        CustomValidator.checkPasswordRequirements(value);
+                  });
+                },
+                suffixIcon: GestureDetector(
+                  onTapDown: (_) {
+                    setState(() {
+                      _isPasswordVisible = true;
+                    });
+                  },
+                  onTapUp: (_) {
+                    setState(() {
+                      _isPasswordVisible = false;
+                    });
+                  },
+                  onTapCancel: () {
+                    setState(() {
+                      _isPasswordVisible = false;
+                    });
+                  },
+                  child: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: Colors.redAccent,
+                  ),
+                ),
               ),
-              const SizedBox(height: kFormHeight),
-
-              // Phone Number
+              if (passwordStrengthMessage != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    passwordStrengthMessage!,
+                    style: TextStyle(
+                        color: passwordStrengthMessage!.contains("not strong")
+                            ? Colors.orange
+                            : Colors.green),
+                  ),
+                ),
+              if (_passwordFocusNode.hasFocus)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildPasswordRequirement(
+                        "At least 8 characters", passwordRequirementsMet[0]),
+                    _buildPasswordRequirement("Contains at least one letter",
+                        passwordRequirementsMet[1]),
+                    _buildPasswordRequirement("Contains at least one number",
+                        passwordRequirementsMet[2]),
+                    _buildPasswordRequirement(
+                        "Contains at least one special character",
+                        passwordRequirementsMet[3]),
+                  ],
+                ),
+              const SizedBox(height: kFieldSpace),
+              CommonTextField(
+                controller: controllers.confirmPasswordController,
+                hintText: kConfirmPass,
+                labelText: kConfirmPass,
+                prefixIcon: const Icon(Icons.lock, color: Colors.redAccent),
+                obscureText: false,
+                validator: (value) {
+                  if (value != controllers.passwordController.text) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: kFieldSpace),
               PhoneFormField(
                 controller: controllers.mobileController,
                 decoration: InputDecoration(
@@ -88,9 +166,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                     const CountrySelectorNavigator.bottomSheet(),
                 isCountryButtonPersistent: true,
               ),
-              const SizedBox(height: kFormHeight),
-
-              // First Name
+              const SizedBox(height: kFieldSpace),
               CommonTextField(
                 controller: controllers.firstNameController,
                 hintText: kFirstName,
@@ -99,9 +175,7 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                 validator: (value) => CustomValidator.validateField(
                     value, 'Please enter your first name'),
               ),
-              const SizedBox(height: kFormHeight),
-
-              // Last Name
+              const SizedBox(height: kFieldSpace),
               CommonTextField(
                 controller: controllers.lastNameController,
                 hintText: kLastName,
@@ -110,51 +184,16 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                 validator: (value) => CustomValidator.validateField(
                     value, 'Please enter your last name'),
               ),
-              const SizedBox(height: kFormHeight),
-
-              // Country, State, City Picker
+              const SizedBox(height: kFieldSpace),
               CSCPicker(
                 showStates: true,
                 showCities: true,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: theme.cardColor,
-                  border: Border.all(color: theme.dividerColor, width: 1),
-                ),
-                disabledDropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: theme.disabledColor,
-                  border: Border.all(color: theme.dividerColor, width: 1),
-                ),
                 defaultCountry: CscCountry.India,
-                countrySearchPlaceholder: "Country",
-                stateSearchPlaceholder: "State",
-                citySearchPlaceholder: "City",
-                countryDropdownLabel: "Country",
-                stateDropdownLabel: "State",
-                cityDropdownLabel: "City",
-                onCountryChanged: (value) {
-                  setState(() {
-                    controllers.countryValue = value;
-                    controllers.updateAddress();
-                  });
-                },
-                onStateChanged: (value) {
-                  setState(() {
-                    controllers.stateValue = value ?? "";
-                    controllers.updateAddress();
-                  });
-                },
-                onCityChanged: (value) {
-                  setState(() {
-                    controllers.cityValue = value ?? "";
-                    controllers.updateAddress();
-                  });
-                },
+                onCountryChanged: (value) => controllers.countryValue = value,
+                onStateChanged: (value) => controllers.stateValue = value ?? '',
+                onCityChanged: (value) => controllers.cityValue = value ?? '',
               ),
-              const SizedBox(height: kFormHeight),
-
-              // Street Address
+              const SizedBox(height: kFieldSpace),
               CommonTextField(
                 controller: controllers.streetAddressController,
                 hintText: kStreetAddress,
@@ -164,58 +203,60 @@ class SignupFormWidgetState extends State<SignupFormWidget> {
                 validator: (value) => CustomValidator.validateField(
                     value, 'Please enter your street address'),
               ),
-              const SizedBox(height: kFormHeight),
-
-              // Postal Code
+              const SizedBox(height: kFieldSpace),
               CommonTextField(
                 controller: controllers.postalCodeController,
                 hintText: kPostalCode,
                 labelText: kPostalCode,
-                prefixIcon: const Icon(Icons.pin, color: Colors.redAccent),
+                prefixIcon: const Icon(Icons.code, color: Colors.redAccent),
+                keyboardType: TextInputType.number,
                 validator: (value) => CustomValidator.validateField(
                     value, 'Please enter your postal code'),
               ),
-              const SizedBox(height: kFormHeight),
-
-              // Signup Button
+              const SizedBox(height: kFieldSpace),
               ElevatedButton(
-                onPressed: isLoading
-                    ? null
-                    : () async {
-                        if (formKey.currentState!.validate()) {
-                          setState(() {
-                            isLoading = true;
-                          });
-
-                          try {
-                            await controllers.handleRegister();
-                          } catch (e) {
-                            // Handle errors
-                          } finally {
-                            setState(() {
-                              isLoading = false;
-                            });
-                          }
-                        }
-                      },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                ),
+                onPressed: isLoading ? null : _submitForm,
                 child: isLoading
-                    ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white),
-                      )
-                    : const Text(kSignup),
+                    ? const CircularProgressIndicator.adaptive()
+                    : Text(kSignup.toUpperCase()),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildPasswordRequirement(String text, bool isMet) {
+    return Row(
+      children: [
+        Icon(isMet ? Icons.check : Icons.close,
+            color: isMet ? Colors.green : Colors.red),
+        const SizedBox(width: 5),
+        Text(text),
+      ],
+    );
+  }
+
+  Future<void> _submitForm() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    controllers.updateAddress();
+
+    try {
+      if (formKey.currentState?.validate() ?? false) {
+        await controllers.handleRegister();
+      }
+    } catch (e) {
+      // Handle errors gracefully
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 }

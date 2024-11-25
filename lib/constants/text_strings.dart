@@ -9,6 +9,7 @@ const String kLogin = "Login";
 const String kSignup = "Signup";
 const String kSignInWithGoogle = "Sign-In with Google";
 const String kSignUpWithGoogle = "Sign-Up with Google";
+const String kConfirmPass = 'Confirm Password';
 
 const String kLoginTitle = "Welcome Back,";
 const String kLoginSubTitle = "For the Farmers...";

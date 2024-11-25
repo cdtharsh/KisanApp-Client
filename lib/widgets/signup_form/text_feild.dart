@@ -10,6 +10,8 @@ class CommonTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onChanged; // Added onChanged parameter
+  final FocusNode? focusNode; // Added focusNode parameter
 
   const CommonTextField({
     super.key,
@@ -22,6 +24,8 @@ class CommonTextField extends StatelessWidget {
     this.textInputAction = TextInputAction.done,
     this.validator,
     this.suffixIcon,
+    this.onChanged, // Added onChanged to constructor
+    this.focusNode, // Added focusNode to constructor
   });
 
   @override
@@ -46,6 +50,8 @@ class CommonTextField extends StatelessWidget {
         keyboardType: keyboardType,
         textInputAction: textInputAction,
         validator: validator,
+        onChanged: onChanged, // Added the onChanged callback here
+        focusNode: focusNode, // Bind the focusNode here
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           labelText: labelText,

@@ -139,8 +139,9 @@ class MailVerificationController extends GetxController {
 
   /// Resend the verification email
   Future<void> resendVerificationEmail() async {
-    if (isLoading.value)
+    if (isLoading.value) {
       return; // Prevent resending while a request is in progress
+    }
 
     try {
       isLoading(true);
