@@ -54,10 +54,13 @@ class CustomValidator {
   /// Password requirements checker
   static List<bool> checkPasswordRequirements(String value) {
     List<bool> requirementsMet = [
-      value.length >= 8,
-      RegExp(r'[A-Za-z]').hasMatch(value),
-      RegExp(r'[0-9]').hasMatch(value),
-      RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value),
+      value.length >= 8, // At least 8 characters
+      RegExp(r'[a-z]')
+          .hasMatch(value), // Contains at least one lowercase letter
+      RegExp(r'[0-9]').hasMatch(value), // Contains at least one digit
+      RegExp(r'[!@#$%^&*(),.?":{}|<>]')
+          .hasMatch(value), // Contains at least one special character
+      RegExp(r'[A-Z]').hasMatch(value), // Contains at least one capital letter
     ];
     return requirementsMet;
   }
