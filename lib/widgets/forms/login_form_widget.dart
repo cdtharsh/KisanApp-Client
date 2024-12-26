@@ -44,13 +44,19 @@ class LoginFormState extends State<LoginForm> {
         box.write('token', response['token']);
         box.write('user', response['user']);
 
+        // Store specific user data (if needed separately)
+        box.write('firstName', response['user']['firstName']);
+        box.write('lastName', response['user']['lastName']);
+        box.write('email', response['user']['email']);
+        box.write('username', response['user']['username']);
+
         CustomSnackbar.show(
           title: 'Login Successful',
           message: response['msg'] ?? 'Welcome!',
           backgroundColor: Colors.green,
           iconData: Icons.check_circle,
         );
-        Get.offAllNamed(AppRoutes.home);
+        Get.offAllNamed(AppRoutes.navbar);
       }
     } catch (e) {
       if (e.toString().contains('Email is not verified')) {

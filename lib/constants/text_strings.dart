@@ -56,3 +56,5 @@ const String kUserName = "* Username";
 const String kWelcomeSubTitle =
     "Learn the scientific way of farming, \nGet crop disease alerts, Consult with Experts. \nBuy products online, Sell too!!";
 const String kWelcomeTitle = "Friend of Farmers";
+const String kAppBarTitle = "Good Day!";
+const String kAppBarSubTitle = "Default User";

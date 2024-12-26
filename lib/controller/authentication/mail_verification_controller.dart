@@ -118,7 +118,7 @@ class MailVerificationController extends GetxController {
 
         isLoggedIn.value = true;
         _stopTimer();
-        Get.offAllNamed(AppRoutes.home);
+        Get.offAllNamed(AppRoutes.navbar);
       } else {
         _handleLoginError('Invalid credentials or token not found.');
       }
