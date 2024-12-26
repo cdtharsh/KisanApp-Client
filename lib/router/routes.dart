@@ -7,6 +7,7 @@ import 'package:kisanapp/screens/authentication/signup_screen.dart';
 import 'package:kisanapp/screens/home/home.dart';
 import 'package:kisanapp/screens/startup/splash_screen.dart';
 import 'package:kisanapp/screens/startup/welcome_screen.dart';
+import 'package:kisanapp/widgets/common/nav_bar.dart';
 
 class AppRoutes {
   static const String splash = '/splash';
@@ -17,12 +18,13 @@ class AppRoutes {
   static const String login = '/login';
   static const String inputEmail = '/inputEmail';
   static const String otp = '/otp';
+  static const String navbar = '/nav';
 
   static List<GetPage> routes = [
     GetPage(name: splash, page: () => const SplashScreen()),
     GetPage(name: welcome, page: () => const WelcomeScreen()),
     GetPage(name: signup, page: () => const SignupScreen()),
-    GetPage(name: home, page: () => const HomeScreen()),
+    GetPage(name: home, page: () => HomeScreen()),
     GetPage(
       name: email,
       page: () {
@@ -46,5 +48,6 @@ class AppRoutes {
             password: password,
           );
         }),
+    GetPage(name: navbar, page: () => const NavigationMenu())
   ];
 }
