@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kisanapp/constants/colors.dart';
 import 'package:kisanapp/screens/home/agri.dart';
 import 'package:kisanapp/screens/home/community.dart';
 import 'package:kisanapp/screens/home/drip.dart';
@@ -11,15 +12,20 @@ class NavigationMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       bottomNavigationBar: Obx(
         () => NavigationBar(
-          height: 80,
+          height: 60,
           elevation: 0,
           selectedIndex: controller.selectedIndex.value,
           onDestinationSelected: (index) =>
               controller.selectedIndex.value = index,
+          backgroundColor: isDark ? kDarkColor : kWhiteColor,
+          indicatorColor: isDark
+              ? kWhiteColor.withOpacity(0.1)
+              : kDarkColor.withOpacity(0.1),
           destinations: [
             NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
             NavigationDestination(icon: Icon(Icons.eco), label: 'Agri'),
