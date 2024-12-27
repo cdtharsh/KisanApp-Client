@@ -16,26 +16,68 @@ class NavigationMenu extends StatelessWidget {
 
     return Scaffold(
       bottomNavigationBar: Obx(
-        () => NavigationBar(
-          height: 60,
-          elevation: 0,
-          selectedIndex: controller.selectedIndex.value,
-          onDestinationSelected: (index) =>
-              controller.selectedIndex.value = index,
-          backgroundColor: isDark ? kDarkColor : kWhiteColor,
-          indicatorColor: isDark
-              ? kWhiteColor.withOpacity(0.1)
-              : kDarkColor.withOpacity(0.1),
-          destinations: [
-            NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.eco), label: 'Agri'),
-            NavigationDestination(icon: Icon(Icons.water_drop), label: 'Drip'),
-            NavigationDestination(
-                icon: Icon(Icons.shopping_cart), label: 'Community')
-          ],
+        () => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors:
+                    isDark ? [kDarkPurple, kDeepBlue] : [kMintGreen, kLavender],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(25), bottom: Radius.circular(25)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: Offset(0, -3),
+                ),
+              ],
+            ),
+            child: NavigationBar(
+              height: 70,
+              elevation: 0,
+              selectedIndex: controller.selectedIndex.value,
+              onDestinationSelected: (index) =>
+                  controller.selectedIndex.value = index,
+              backgroundColor: Colors.transparent,
+              indicatorColor: isDark
+                  ? kLavender
+                  : kLightPink
+                      .withOpacity(0.5), // Soft indicator for light mode
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+              destinations: [
+                _buildNavigationItem(Icons.home_rounded, 'Home', isDark),
+                _buildNavigationItem(Icons.eco_rounded, 'Agri', isDark),
+                _buildNavigationItem(Icons.water_drop_rounded, 'Drip', isDark),
+                _buildNavigationItem(
+                    Icons.shopping_cart_rounded, 'Community', isDark),
+              ],
+            ),
+          ),
         ),
       ),
       body: Obx(() => controller.screens[controller.selectedIndex.value]),
+    );
+  }
+
+  NavigationDestination _buildNavigationItem(
+      IconData icon, String label, bool isDark) {
+    return NavigationDestination(
+      icon: Icon(
+        icon,
+        size: 28,
+        color: isDark ? kLavender : kDeepBlue,
+      ),
+      selectedIcon: Icon(
+        icon,
+        size: 32,
+        color:
+            isDark ? kElectricBlue : kDarkPurple, // High contrast in light mode
+      ),
+      label: label,
     );
   }
 }

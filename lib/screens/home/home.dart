@@ -26,29 +26,51 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            KAppBar(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SafeArea(
+                child: KAppBar(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10),
+                      Text(
+                        'Welcome to the app!',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: kWhiteColor),
+                      ),
+                      // Displaying the user's name with proper capitalization
+                      Text(
+                        '${capitalize(firstName)} ${capitalize(lastName)}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Welcome to the app!',
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                  // Displaying the user's name with proper capitalization
-                  Text(
-                    '${capitalize(firstName)} ${capitalize(lastName)}',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ],
+                  actions: [
+                    IconButton(
+                      onPressed: logoutController.logout,
+                      icon: Icon(Icons.logout, size: 30, color: Colors.white),
+                    ),
+                  ],
+                  iconSize: 30.0, // Customizable icon size
+                  titleFontSize: 26.0, // Customizable title font size
+                  titleFontWeight: FontWeight.bold, // Customizable font weight
+                  backgroundColor: Colors.transparent, // Gradient background
+                  elevation: 10.0, // Custom elevation
+                  borderRadius: 25.0, // Rounded corners at the bottom
+                  roundBottomLeft: true,
+                  roundTopLeft: true,
+                  roundBottomRight: true,
+                  roundTopRight: true,
+                ),
               ),
-              actions: [
-                IconButton(
-                    onPressed: logoutController.logout,
-                    icon: Icon(Icons.logout))
-              ],
             ),
             SizedBox(
               height: 8,
@@ -61,7 +83,12 @@ class HomeScreen extends StatelessWidget {
                   Center(
                     child: Text(
                       'Make Crop Healthy',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? Colors.white : Colors.black,
+                            fontSize: 24,
+                            fontFamily: 'Poppins', // Modern font
+                          ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -69,17 +96,17 @@ class HomeScreen extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color: isDark ? kDarkColor : Colors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          blurRadius: 6,
-                          offset: Offset(0, 3),
+                          color: Colors.grey.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 6),
                         ),
                       ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
                           Row(
@@ -88,38 +115,64 @@ class HomeScreen extends StatelessWidget {
                               Column(
                                 children: [
                                   Icon(Icons.photo,
-                                      size: 40, color: Colors.green),
-                                  SizedBox(height: 8),
+                                      size: 40, color: Colors.pink.shade300),
+                                  const SizedBox(height: 8),
                                   Text(
                                     'Image',
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: isDark
+                                              ? Colors.white
+                                              : Colors.black87,
+                                          fontFamily: 'Poppins', // Modern font
+                                        ),
                                   ),
                                 ],
                               ),
-                              Icon(Icons.arrow_forward, size: 30),
+                              Icon(Icons.arrow_forward,
+                                  size: 30, color: Colors.purple.shade200),
                               Column(
                                 children: [
                                   Icon(Icons.assignment,
-                                      size: 40, color: Colors.blue),
-                                  SizedBox(height: 8),
+                                      size: 40, color: Colors.blue.shade300),
+                                  const SizedBox(height: 8),
                                   Text(
                                     'Diagnosis',
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: isDark
+                                              ? Colors.white
+                                              : Colors.black87,
+                                          fontFamily: 'Poppins',
+                                        ),
                                   ),
                                 ],
                               ),
-                              Icon(Icons.arrow_forward, size: 30),
+                              Icon(Icons.arrow_forward,
+                                  size: 30, color: Colors.purple.shade200),
                               Column(
                                 children: [
                                   Icon(Icons.medical_services,
-                                      size: 40, color: Colors.orange),
-                                  SizedBox(height: 8),
+                                      size: 40, color: Colors.orange.shade300),
+                                  const SizedBox(height: 8),
                                   Text(
                                     'Medicine',
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: isDark
+                                              ? Colors.white
+                                              : Colors.black87,
+                                          fontFamily: 'Poppins',
+                                        ),
                                   ),
                                 ],
                               ),
@@ -131,55 +184,121 @@ class HomeScreen extends StatelessWidget {
                               // Handle button press
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
+                              backgroundColor: Colors.teal.shade300,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               minimumSize: const Size(double.infinity, 50),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
                             ),
                             child: const Text(
                               'Take a Picture',
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Poppins',
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
+            // Replace the current card layout with a GridView
             Padding(
-              padding: EdgeInsets.all(8),
-              child: GridCard(
-                  title: 'Crop Information',
-                  icon: Icons.info,
-                  iconColor: Colors.green,
-                  height: 80),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: GridCard(
-                  title: 'Pest and diseases',
-                  icon: Icons.bug_report,
-                  iconColor: Colors.red,
-                  height: 80),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: GridCard(
-                  title: 'Soil Testing',
-                  icon: Icons.medical_information,
-                  iconColor: Colors.orange,
-                  height: 80),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: GridCard(
-                  title: 'Alerts',
-                  icon: Icons.error,
-                  iconColor: Colors.pink,
-                  height: 80),
+              padding: const EdgeInsets.all(8),
+              child: Container(
+                height: 200, // Fixed height of the grid container
+                width: double.infinity, // Full width of the parent container
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.purple.shade100, Colors.blue.shade50],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius:
+                      BorderRadius.circular(16), // Rounded edges for container
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      blurRadius: 12,
+                      offset:
+                          const Offset(0, 6), // Slight shadow offset for depth
+                    ),
+                  ],
+                ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Calculate dynamic aspect ratio for the grid items
+                    final double gridItemHeight = (constraints.maxHeight - 30) /
+                        2; // Two rows with spacing
+                    final double gridItemWidth = (constraints.maxWidth - 24) /
+                        2; // Two columns with spacing
+                    final double aspectRatio = gridItemWidth / gridItemHeight;
+
+                    return GridView.builder(
+                      itemCount: 4, // Total number of cards
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Two items per row
+                        crossAxisSpacing: 12, // Spacing between columns
+                        mainAxisSpacing: 12, // Spacing between rows
+                        childAspectRatio: aspectRatio, // Dynamically calculated
+                      ),
+                      physics:
+                          const NeverScrollableScrollPhysics(), // Prevent grid scrolling
+                      padding:
+                          const EdgeInsets.all(8), // Padding around the grid
+                      itemBuilder: (context, index) {
+                        // Data for the grid items
+                        final items = [
+                          {
+                            'title': 'Crop Information',
+                            'icon': Icons.info,
+                            'color': Colors.green.shade300,
+                            'background': Colors.green.shade100
+                          },
+                          {
+                            'title': 'Pest and Diseases',
+                            'icon': Icons.bug_report,
+                            'color': Colors.red.shade300,
+                            'background': Colors.red.shade100
+                          },
+                          {
+                            'title': 'Soil Testing',
+                            'icon': Icons.medical_information,
+                            'color': Colors.orange.shade300,
+                            'background': Colors.orange.shade100
+                          },
+                          {
+                            'title': 'Alerts',
+                            'icon': Icons.error,
+                            'color': Colors.pink.shade300,
+                            'background': Colors.pink.shade100
+                          },
+                        ];
+
+                        final item = items[index];
+
+                        return GridCard(
+                          title: item['title'] as String,
+                          icon: item['icon'] as IconData,
+                          iconColor: item['color'] as Color,
+                          backgroundColor: item['background'] as Color,
+                          height:
+                              gridItemHeight, // Dynamically calculated height
+                          onTap: () {
+                            // Handle tap actions here
+                            debugPrint('${item['title']} clicked!');
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         ),
