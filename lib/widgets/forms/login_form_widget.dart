@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kisanapp/screens/authentication/email_input_screen.dart';
-import 'package:kisanapp/widgets/common/forget_card.dart';
+import 'package:kisanapp/widgets/layouts/forget_card.dart';
 import '../../controller/authentication/login_controller.dart';
 import '../../constants/text_strings.dart';
 import '../../router/routes.dart';

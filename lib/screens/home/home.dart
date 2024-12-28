@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:kisanapp/constants/colors.dart';
 import 'package:kisanapp/controller/authentication/logout_controller.dart';
 import 'package:kisanapp/widgets/layouts/grid_layout.dart';
+import 'package:kisanapp/widgets/layouts/product_coursel.dart';
 
 import '../../controller/data/user_data_controller.dart';
 import '../../widgets/common/app_bar.dart';
@@ -11,6 +12,28 @@ import '../../widgets/common/app_bar.dart';
 class HomeScreen extends StatelessWidget {
   final UserController userController = Get.put(UserController());
   final LogoutController logoutController = Get.put(LogoutController());
+  final List<Map<String, String>> products = [
+    {
+      'image': 'https://via.placeholder.com/150', // Dummy image URL
+      'title': 'Product 1',
+      'price': '\₹20'
+    },
+    {
+      'image': 'https://via.placeholder.com/150',
+      'title': 'Product 2',
+      'price': '\₹30'
+    },
+    {
+      'image': 'https://via.placeholder.com/150',
+      'title': 'Product 3',
+      'price': '\₹40'
+    },
+    {
+      'image': 'https://via.placeholder.com/150',
+      'title': 'Product 4',
+      'price': '\₹50'
+    },
+  ];
 
   HomeScreen({super.key});
 
@@ -23,6 +46,7 @@ class HomeScreen extends StatelessWidget {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: isDark ? kDarkPurple : kLavender,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -33,13 +57,13 @@ class HomeScreen extends StatelessWidget {
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Text(
                         'Welcome to the app!',
                         style: Theme.of(context)
                             .textTheme
                             .labelLarge
-                            ?.copyWith(color: kWhiteColor),
+                            ?.copyWith(color: kWhiteColor, fontSize: 10),
                       ),
                       // Displaying the user's name with proper capitalization
                       Text(
@@ -49,7 +73,8 @@ class HomeScreen extends StatelessWidget {
                             .headlineSmall
                             ?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                                color: Colors.white,
+                                fontSize: 15),
                       ),
                     ],
                   ),
@@ -72,9 +97,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              height: 8,
-            ),
+            SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -203,56 +226,49 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-            // Replace the current card layout with a GridView
             Padding(
               padding: const EdgeInsets.all(8),
               child: Container(
-                height: 200, // Fixed height of the grid container
-                width: double.infinity, // Full width of the parent container
+                height: 200,
+                width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Colors.purple.shade100, Colors.blue.shade50],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius:
-                      BorderRadius.circular(16), // Rounded edges for container
+                  borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.3),
                       blurRadius: 12,
-                      offset:
-                          const Offset(0, 6), // Slight shadow offset for depth
+                      offset: const Offset(0, 6),
                     ),
                   ],
                 ),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    // Calculate dynamic aspect ratio for the grid items
-                    final double gridItemHeight = (constraints.maxHeight - 30) /
-                        2; // Two rows with spacing
-                    final double gridItemWidth = (constraints.maxWidth - 24) /
-                        2; // Two columns with spacing
+                    final double gridItemHeight =
+                        (constraints.maxHeight - 30) / 2;
+                    final double gridItemWidth =
+                        (constraints.maxWidth - 24) / 2;
                     final double aspectRatio = gridItemWidth / gridItemHeight;
 
                     return GridView.builder(
-                      itemCount: 4, // Total number of cards
+                      itemCount: 4,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // Two items per row
-                        crossAxisSpacing: 12, // Spacing between columns
-                        mainAxisSpacing: 12, // Spacing between rows
-                        childAspectRatio: aspectRatio, // Dynamically calculated
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: aspectRatio,
                       ),
-                      physics:
-                          const NeverScrollableScrollPhysics(), // Prevent grid scrolling
-                      padding:
-                          const EdgeInsets.all(8), // Padding around the grid
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(8),
                       itemBuilder: (context, index) {
-                        // Data for the grid items
                         final items = [
                           {
                             'title': 'Crop Information',
@@ -269,7 +285,7 @@ class HomeScreen extends StatelessWidget {
                           {
                             'title': 'Soil Testing',
                             'icon': Icons.medical_information,
-                            'color': Colors.orange.shade300,
+                            'color': kDarkColor,
                             'background': Colors.orange.shade100
                           },
                           {
@@ -281,18 +297,13 @@ class HomeScreen extends StatelessWidget {
                         ];
 
                         final item = items[index];
-
                         return GridCard(
                           title: item['title'] as String,
                           icon: item['icon'] as IconData,
                           iconColor: item['color'] as Color,
                           backgroundColor: item['background'] as Color,
-                          height:
-                              gridItemHeight, // Dynamically calculated height
-                          onTap: () {
-                            // Handle tap actions here
-                            debugPrint('${item['title']} clicked!');
-                          },
+                          height: gridItemHeight,
+                          onTap: () {},
                         );
                       },
                     );
@@ -300,17 +311,15 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
+            ProductCarousel(products: products)
           ],
         ),
       ),
     );
   }
 
-  // Helper function to capitalize the first letter of a string
   String capitalize(String text) {
-    if (text.isEmpty) {
-      return text;
-    }
-    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
   }
 }

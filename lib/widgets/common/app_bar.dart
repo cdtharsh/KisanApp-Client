@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kisanapp/constants/sizes.dart';
-import 'package:kisanapp/constants/colors.dart'; // Import color palette
+import 'package:kisanapp/constants/colors.dart';
 
 class KAppBar extends StatelessWidget implements PreferredSizeWidget {
   const KAppBar({
@@ -17,10 +17,10 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor = Colors.transparent,
     this.elevation = 8.0,
     this.borderRadius = 40.0,
-    this.roundTopLeft = false, // Flag for top-left corner
-    this.roundTopRight = false, // Flag for top-right corner
-    this.roundBottomLeft = false, // Flag for bottom-left corner
-    this.roundBottomRight = false, // Flag for bottom-right corner
+    this.roundTopLeft = false,
+    this.roundTopRight = false,
+    this.roundBottomLeft = false,
+    this.roundBottomRight = false,
   });
 
   final Widget? title;
@@ -35,7 +35,6 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double elevation;
   final double borderRadius;
 
-  // Flags for deciding which corners to round
   final bool roundTopLeft;
   final bool roundTopRight;
   final bool roundBottomLeft;
@@ -45,61 +44,80 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        // Apply gradient for a stylish background
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [kBluePurple, kNeonPink], // Gen Z-inspired colors
+          colors: [kBluePurple, kNeonPink], // Vibrant gradient colors
         ),
-        borderRadius: BorderRadius.only(
-          topLeft: roundTopLeft ? Radius.circular(borderRadius) : Radius.zero,
-          topRight: roundTopRight ? Radius.circular(borderRadius) : Radius.zero,
-          bottomLeft:
-              roundBottomLeft ? Radius.circular(borderRadius) : Radius.zero,
-          bottomRight:
-              roundBottomRight ? Radius.circular(borderRadius) : Radius.zero,
-        ), // Dynamically round corners based on flags
+        borderRadius: _buildBorderRadius(),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
             blurRadius: 5.0,
             spreadRadius: 1.0,
-            offset: Offset(0, 3), // Slight shadow for floating effect
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: AppBar(
-        backgroundColor: Colors
-            .transparent, // Make the AppBar background transparent to show the gradient
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        leading: showBackArrow
-            ? IconButton(
-                onPressed: () => Get.back(),
-                icon: Icon(Icons.arrow_left,
-                    size: iconSize,
-                    color: kElectricBlue)) // Bold icon with electric blue color
-            : leadingIcon != null
-                ? IconButton(
-                    onPressed: leadingOnPressed,
-                    icon: Icon(leadingIcon,
-                        size: iconSize,
-                        color: kElectricBlue)) // Customizable icon
-                : null,
-        title: title != null
-            ? DefaultTextStyle(
-                style: TextStyle(
-                    color: kLavender,
-                    fontSize: titleFontSize,
-                    fontWeight: titleFontWeight),
-                child: title!)
-            : null,
+        leading: _buildLeadingIcon(),
+        title: _buildTitle(),
         actions: actions,
-        elevation: elevation, // Modern elevation for shadow effect
+        elevation: elevation,
       ),
     );
   }
 
+  BorderRadius _buildBorderRadius() {
+    return BorderRadius.only(
+      topLeft: roundTopLeft ? Radius.circular(borderRadius) : Radius.zero,
+      topRight: roundTopRight ? Radius.circular(borderRadius) : Radius.zero,
+      bottomLeft: roundBottomLeft ? Radius.circular(borderRadius) : Radius.zero,
+      bottomRight:
+          roundBottomRight ? Radius.circular(borderRadius) : Radius.zero,
+    );
+  }
+
+  Widget? _buildLeadingIcon() {
+    if (showBackArrow) {
+      return IconButton(
+        onPressed: () => Get.back(),
+        icon: Icon(
+          Icons.arrow_back,
+          size: iconSize,
+          color: kElectricBlue,
+        ),
+      );
+    }
+    if (leadingIcon != null) {
+      return IconButton(
+        onPressed: leadingOnPressed,
+        icon: Icon(
+          leadingIcon,
+          size: iconSize,
+          color: kElectricBlue,
+        ),
+      );
+    }
+    return null;
+  }
+
+  Widget? _buildTitle() {
+    if (title != null) {
+      return DefaultTextStyle(
+        style: TextStyle(
+          color: kLavender,
+          fontSize: titleFontSize,
+          fontWeight: titleFontWeight,
+        ),
+        child: title!,
+      );
+    }
+    return null;
+  }
+
   @override
-  Size get preferredSize =>
-      Size.fromHeight(kToolbarHeight + kDefaultSize); // Height of the AppBar
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + kDefaultSize);
 }

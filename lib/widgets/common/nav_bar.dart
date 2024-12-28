@@ -15,80 +15,132 @@ class NavigationMenu extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      bottomNavigationBar: Obx(
-        () => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors:
-                    isDark ? [kDarkPurple, kDeepBlue] : [kMintGreen, kLavender],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(25), bottom: Radius.circular(25)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: Offset(0, -3),
+      body: Obx(() => Stack(
+            children: [
+              // Screen content with swipeable pages
+              SafeArea(
+                child: PageView(
+                  controller: controller.pageController,
+                  onPageChanged: (index) {
+                    controller.selectedIndex.value = index;
+                  },
+                  physics: BouncingScrollPhysics(),
+                  children: controller.screens,
                 ),
-              ],
-            ),
-            child: NavigationBar(
-              height: 70,
-              elevation: 0,
-              selectedIndex: controller.selectedIndex.value,
-              onDestinationSelected: (index) =>
-                  controller.selectedIndex.value = index,
-              backgroundColor: Colors.transparent,
-              indicatorColor: isDark
-                  ? kLavender
-                  : kLightPink
-                      .withOpacity(0.5), // Soft indicator for light mode
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-              destinations: [
-                _buildNavigationItem(Icons.home_rounded, 'Home', isDark),
-                _buildNavigationItem(Icons.eco_rounded, 'Agri', isDark),
-                _buildNavigationItem(Icons.water_drop_rounded, 'Drip', isDark),
-                _buildNavigationItem(
-                    Icons.shopping_cart_rounded, 'Community', isDark),
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: Obx(() => controller.screens[controller.selectedIndex.value]),
+              ),
+              // Floating Navigation Bar
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 50.0, vertical: 10.0),
+                  child: Container(
+                    height: 80,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: isDark
+                            ? [Colors.purple, Colors.blue]
+                            : [Colors.pinkAccent, Colors.lightBlue],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 6.0,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildNavigationItem(
+                          Icons.home_rounded,
+                          'Home',
+                          isDark,
+                          0,
+                          controller,
+                        ),
+                        _buildNavigationItem(
+                          Icons.eco_rounded,
+                          'Agri',
+                          isDark,
+                          1,
+                          controller,
+                        ),
+                        _buildNavigationItem(
+                          Icons.water_drop_rounded,
+                          'Drip',
+                          isDark,
+                          2,
+                          controller,
+                        ),
+                        _buildNavigationItem(
+                          Icons.group,
+                          'Community',
+                          isDark,
+                          3,
+                          controller,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 
-  NavigationDestination _buildNavigationItem(
-      IconData icon, String label, bool isDark) {
-    return NavigationDestination(
-      icon: Icon(
-        icon,
-        size: 28,
-        color: isDark ? kLavender : kDeepBlue,
+  Widget _buildNavigationItem(IconData icon, String label, bool isDark,
+      int index, NavigationController controller) {
+    bool isSelected = controller.selectedIndex.value == index;
+
+    return GestureDetector(
+      onTap: () {
+        // Check if the tapped page is already selected to avoid unnecessary transition
+        if (controller.selectedIndex.value != index) {
+          // Jump directly to the selected page without animating through intermediate pages
+          controller.pageController.jumpToPage(index);
+          controller.selectedIndex.value = index;
+        }
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: isSelected ? 32 : 28, // Slightly larger icon for selected
+            color: isSelected
+                ? (isDark ? kElectricBlue : kDarkPurple)
+                : (isDark ? kLavender : kDeepBlue),
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: isSelected
+                  ? (isDark ? kElectricBlue : kDarkPurple)
+                  : (isDark ? kLavender : kDeepBlue),
+            ),
+          ),
+        ],
       ),
-      selectedIcon: Icon(
-        icon,
-        size: 32,
-        color:
-            isDark ? kElectricBlue : kDarkPurple, // High contrast in light mode
-      ),
-      label: label,
     );
   }
 }
 
 class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
+  final PageController pageController = PageController();
 
   final screens = [
     HomeScreen(),
     AgriProductPage(),
     DripProductPage(),
-    CommunityPage()
+    CommunityPage(),
   ];
 }
