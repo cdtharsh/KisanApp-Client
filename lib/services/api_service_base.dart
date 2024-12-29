@@ -34,14 +34,21 @@ class ApiServiceBase {
   }
 
   /// Send a GET request
-  Future<Map<String, dynamic>> get(String endpoint) async {
+  Future<Map<String, dynamic>> get(String endpoint, {String? token}) async {
     final url = Uri.parse('$baseUrl/$endpoint');
     try {
+      final headers = <String, String>{
+        'Content-Type': 'application/json',
+      };
+
+      // Add Bearer token if it's provided
+      if (token != null && token.isNotEmpty) {
+        headers['Authorization'] = 'Bearer $token';
+      }
+
       final response = await http.get(
         url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers,
       );
 
       if (_isSuccess(response.statusCode)) {
