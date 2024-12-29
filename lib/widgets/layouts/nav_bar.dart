@@ -35,12 +35,12 @@ class NavigationMenu extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 50.0, vertical: 10.0),
                   child: Container(
-                    height: 80,
+                    height: 60,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: isDark
                             ? [Colors.purple, Colors.blue]
-                            : [Colors.pinkAccent, Colors.lightBlue],
+                            : [Colors.green.shade100, Colors.lightBlue],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),

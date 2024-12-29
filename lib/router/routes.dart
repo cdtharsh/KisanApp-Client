@@ -7,7 +7,7 @@ import 'package:kisanapp/screens/authentication/signup_screen.dart';
 import 'package:kisanapp/screens/home/home.dart';
 import 'package:kisanapp/screens/startup/splash_screen.dart';
 import 'package:kisanapp/screens/startup/welcome_screen.dart';
-import 'package:kisanapp/widgets/common/nav_bar.dart';
+import 'package:kisanapp/widgets/layouts/nav_bar.dart';
 
 class AppRoutes {
   static const String splash = '/splash';

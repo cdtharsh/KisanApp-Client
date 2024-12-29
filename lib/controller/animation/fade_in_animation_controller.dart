@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kisanapp/screens/startup/welcome_screen.dart';
-import 'package:kisanapp/widgets/common/nav_bar.dart';
+import 'package:kisanapp/widgets/layouts/nav_bar.dart';
 
 class FadeInAnimationController extends GetxController {
   static FadeInAnimationController get find => Get.find();
