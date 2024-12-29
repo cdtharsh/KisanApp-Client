@@ -88,7 +88,7 @@ class WeatherCard extends StatelessWidget {
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? kLightPrimary : kDarkPrimary),
+                  color: isDark ? kLightPrimary : kDarkCharcoal),
             ),
             Text('$region, $country',
                 style: TextStyle(fontSize: 16, color: kAccentCoolGray)),
@@ -99,7 +99,7 @@ class WeatherCard extends StatelessWidget {
           ],
         ),
         Icon(Icons.location_on,
-            color: isDark ? kLightPrimary : kDarkPrimary, size: 30),
+            color: isDark ? kLightPrimary : Colors.redAccent, size: 30),
       ],
     );
   }
@@ -114,7 +114,7 @@ class WeatherCard extends StatelessWidget {
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: isDark ? kLightPrimary : kDarkPrimary)),
+                color: isDark ? kLightPrimary : kDarkCharcoal)),
       ],
     );
   }
@@ -126,7 +126,7 @@ class WeatherCard extends StatelessWidget {
             style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: isDark ? kLightPrimary : kDarkPrimary)),
+                color: isDark ? kVividBlue : kVividBlue)),
         SizedBox(width: 10),
         Text('Feels like: $feelsLike°C',
             style: TextStyle(fontSize: 16, color: kAccentCoolGray)),

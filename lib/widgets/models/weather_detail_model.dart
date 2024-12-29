@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kisanapp/constants/colors.dart';
 
 class WeatherDetail extends StatelessWidget {
   final IconData icon;
@@ -19,13 +18,16 @@ class WeatherDetail extends StatelessWidget {
 
     // Apply colors based on dark or light theme
     Color iconColor = isDark
-        ? kLightText
-        : kDarkPurple; // Light color for dark theme, Dark Purple for light theme
+        ? Colors.white70 // Light color for dark theme
+        : Colors.black87; // Dark color for light theme
+
     Color labelColor = isDark
-        ? kAccentCoolGray
-        : kDarkSlateGray; // Soft gray for dark theme, dark slate gray for light theme
-    Color valueColor =
-        kVividBlue; // Vivid Blue for the value to ensure good contrast on both backgrounds
+        ? Colors.white60 // Soft white for dark theme
+        : Colors.black54; // Gray for light theme
+
+    Color valueColor = isDark
+        ? Colors.cyanAccent // Bright color for dark theme
+        : Colors.blueAccent; // Bright color for light theme
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
