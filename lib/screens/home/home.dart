@@ -4,10 +4,9 @@ import 'package:kisanapp/services/weather_api_service.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kisanapp/constants/colors.dart';
 import 'package:kisanapp/controller/authentication/logout_controller.dart';
+import 'package:kisanapp/utils/helper/shimmer_effect.dart';
 import 'package:kisanapp/widgets/layouts/product_coursel.dart';
-import 'package:geolocator/geolocator.dart'; // Import the geolocator package
-import 'package:shimmer/shimmer.dart';
-
+import 'package:geolocator/geolocator.dart';
 import '../../controller/data/user_data_controller.dart';
 import '../../widgets/layouts/app_bar.dart';
 import '../../widgets/layouts/drawer_left.dart';
@@ -73,7 +72,7 @@ class HomeScreenState extends State<HomeScreen> {
       final Duration difference = currentTime.difference(timestamp);
 
       // If the cached data is less than 1 hour old, use it
-      if (difference.inMinutes < 60) {
+      if (difference.inMicroseconds < 1) {
         setState(() {
           weatherData = cachedData;
         });
@@ -196,43 +195,16 @@ class HomeScreenState extends State<HomeScreen> {
                     0.0, // Using a fallback if null
                 gustSpeed: weatherData!['current']['gust_kph']?.toDouble() ??
                     0.0, // Using a fallback if null
-                uvIndex: weatherData!['current']['uv']?.toInt() ??
-                    0, // Using a fallback if null
+                uvIndex: weatherData!['current']['uv']?.toInt() ?? 0,
+                isDark: isDark, // Using a fallback if null
               )
             else
-              // Show the shimmer effect while the weather data is loading
-              Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Container(
-                  width: double.infinity,
-                  height: 200,
-                  color: Colors.white,
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 150,
-                        height: 20,
-                        color: Colors.white,
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        width: 100,
-                        height: 20,
-                        color: Colors.white,
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        width: 200,
-                        height: 20,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: (ShimmerWidget(
+                    height: 100, width: double.infinity, isDark: isDark)),
               ),
+
             SizedBox(height: 8),
             PictureSection(isDark: isDark),
             InformationSectionCard(),

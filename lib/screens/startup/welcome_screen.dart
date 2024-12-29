@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../widgets/fade_in_animation/animation_widget.dart';
 import '../../controller/animation/fade_in_animation_controller.dart';
-import '../../widgets/fade_in_animation/fade_in_animation_model.dart';
+import '../../widgets/models/fade_in_animation_model.dart';
 import '../../constants/colors.dart';
 import '../../constants/image_strings.dart';
 import '../../constants/text_strings.dart';
