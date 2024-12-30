@@ -1,5 +1,3 @@
-import 'package:kisanapp/models/weather/weather_condition_model.dart';
-
 class DayWeather {
   final num maxTempC;
   final num minTempC;

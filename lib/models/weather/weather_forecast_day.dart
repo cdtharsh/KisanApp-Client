@@ -1,6 +1,4 @@
-import 'package:kisanapp/models/weather/weather_astro_model.dart';
 import 'package:kisanapp/models/weather/weather_day_model.dart';
-import 'package:kisanapp/models/weather/weather_forecast_hourly.dart';
 
 class ForecastDay {
   // final String date;

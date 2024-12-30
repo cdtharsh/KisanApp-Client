@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kisanapp/pages/custome_camera.dart';
 
 import '../../constants/colors.dart';
 
@@ -112,7 +113,10 @@ class PictureSection extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      // Handle button press
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CameraScreen()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal.shade300,
