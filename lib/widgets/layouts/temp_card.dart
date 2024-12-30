@@ -31,7 +31,6 @@ class TemperatureCard extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       child: GestureDetector(
         onTap: () {
-          // Navigate to the weather page with necessary data
           if (onTap != null) {
             onTap!();
           } else {

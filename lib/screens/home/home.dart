@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kisanapp/constants/colors.dart';
 import 'package:kisanapp/controller/authentication/logout_controller.dart';
+import 'package:kisanapp/pages/weather_forcast.dart';
 import 'package:kisanapp/widgets/layouts/product_coursel.dart';
 import 'package:kisanapp/widgets/layouts/temp_card.dart';
 import '../../controller/data/user_data_controller.dart';
@@ -138,6 +139,9 @@ class HomeScreenState extends State<HomeScreen> {
             ),
             if (weatherData != null)
               TemperatureCard(
+                onTap: () {
+                  Get.to(() => WeatherForcast());
+                },
                 location: weatherData!['location']['name'],
                 condition: weatherData!['current']['condition']['text'],
                 iconUrl:
