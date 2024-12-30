@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kisanapp/constants/colors.dart';
-import '../../models/weather_detail_model.dart';
+import 'weather_detail_model.dart';
 
 class WeatherCard extends StatelessWidget {
   final String? location;

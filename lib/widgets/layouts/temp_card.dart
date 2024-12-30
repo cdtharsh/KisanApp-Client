@@ -10,6 +10,8 @@ class TemperatureCard extends StatelessWidget {
   final double? temperature;
   final double? windChill;
   final double? heatIndex;
+  final double? maxTemp;
+  final double? minTemp;
   final bool isDark;
   final VoidCallback? onTap;
 
@@ -21,8 +23,10 @@ class TemperatureCard extends StatelessWidget {
     this.temperature,
     this.windChill,
     this.heatIndex,
+    this.maxTemp,
     required this.isDark,
     this.onTap,
+    this.minTemp,
   });
 
   @override
@@ -65,7 +69,7 @@ class TemperatureCard extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    '$condition • $windChill°C / $heatIndex°C',
+                    '$condition • $minTemp°C / $maxTemp°C',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,

@@ -7,6 +7,7 @@ import 'package:kisanapp/pages/weather_forcast.dart';
 import 'package:kisanapp/widgets/layouts/product_coursel.dart';
 import 'package:kisanapp/widgets/layouts/temp_card.dart';
 import '../../controller/data/user_data_controller.dart';
+import '../../models/weather_data.dart';
 import '../../utils/helper/fetch_weather.dart';
 import '../../widgets/layouts/app_bar.dart';
 import '../../widgets/layouts/drawer_left.dart';
@@ -27,7 +28,7 @@ class HomeScreenState extends State<HomeScreen> {
   final LogoutController logoutController = Get.put(LogoutController());
   final WeatherService weatherService = WeatherService();
 
-  Map<String, dynamic>? weatherData; // Store the weather data
+  WeatherResponse? weatherResponse; // Updated type to WeatherResponse
   final List<Map<String, String>> products = [
     {
       'image': 'https://via.placeholder.com/150',
@@ -63,9 +64,9 @@ class HomeScreenState extends State<HomeScreen> {
     String token = box.read('token');
 
     try {
-      final weather = await weatherService.fetchWeatherData(token);
+      final weatherJson = await weatherService.fetchWeatherData(token);
       setState(() {
-        weatherData = weather;
+        weatherResponse = WeatherResponse.fromJson(weatherJson!);
       });
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch weather data');
@@ -137,20 +138,19 @@ class HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            if (weatherData != null)
+            if (weatherResponse != null)
               TemperatureCard(
                 onTap: () {
                   Get.to(() => WeatherForcast());
                 },
-                location: weatherData!['location']['name'],
-                condition: weatherData!['current']['condition']['text'],
-                iconUrl:
-                    'https:${weatherData!['current']['condition']['icon']}',
-                temperature: weatherData!['current']['temp_c'].toDouble(),
-                windChill:
-                    weatherData!['current']['windchill_c']?.toDouble() ?? 0.0,
-                heatIndex:
-                    weatherData!['current']['heatindex_c']?.toDouble() ?? 0.0,
+                location: weatherResponse!.location.name,
+                condition: weatherResponse!.current.condition.text,
+                iconUrl: 'https:${weatherResponse!.current.condition.icon}',
+                temperature: weatherResponse!.current.tempC,
+                maxTemp: weatherResponse!
+                    .forecast.forecastDays[0].dayWeather.maxTempC,
+                minTemp: weatherResponse!
+                    .forecast.forecastDays[0].dayWeather.minTempC,
                 isDark: isDark,
               )
             else
