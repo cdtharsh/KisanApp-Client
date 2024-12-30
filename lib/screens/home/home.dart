@@ -7,7 +7,7 @@ import 'package:kisanapp/pages/weather_forcast.dart';
 import 'package:kisanapp/widgets/layouts/product_coursel.dart';
 import 'package:kisanapp/widgets/layouts/temp_card.dart';
 import '../../controller/data/user_data_controller.dart';
-import '../../models/weather_data.dart';
+import '../../models/weather/weather_data_model.dart';
 import '../../utils/helper/fetch_weather.dart';
 import '../../widgets/layouts/app_bar.dart';
 import '../../widgets/layouts/drawer_left.dart';
@@ -69,7 +69,7 @@ class HomeScreenState extends State<HomeScreen> {
         weatherResponse = WeatherResponse.fromJson(weatherJson!);
       });
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch weather data');
+      Get.snackbar('Error', e.toString());
     }
   }
 
@@ -99,7 +99,7 @@ class HomeScreenState extends State<HomeScreen> {
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Text(
                         'Welcome to the app!',
                         style: Theme.of(context)
@@ -109,20 +109,20 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                       Text(
                         '${capitalize(firstName)} ${capitalize(lastName)}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 15),
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
                       ),
                     ],
                   ),
                   actions: [
                     IconButton(
                       onPressed: logoutController.logout,
-                      icon: Icon(Icons.logout, size: 30, color: Colors.white),
+                      icon: const Icon(Icons.logout,
+                          size: 30, color: Colors.white),
                     ),
                   ],
                   iconSize: 30.0,
@@ -144,9 +144,9 @@ class HomeScreenState extends State<HomeScreen> {
                   Get.to(() => WeatherForcast());
                 },
                 location: weatherResponse!.location.name,
+                temperature: weatherResponse!.current.tempC,
                 condition: weatherResponse!.current.condition.text,
                 iconUrl: 'https:${weatherResponse!.current.condition.icon}',
-                temperature: weatherResponse!.current.tempC,
                 maxTemp: weatherResponse!
                     .forecast.forecastDays[0].dayWeather.maxTempC,
                 minTemp: weatherResponse!
@@ -157,13 +157,16 @@ class HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ShimmerWidget(
-                    height: 100, width: double.infinity, isDark: isDark),
+                  height: 100,
+                  width: double.infinity,
+                  isDark: isDark,
+                ),
               ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             PictureSection(isDark: isDark),
             InformationSectionCard(),
             ProductCarousel(products: products),
-            SizedBox(height: 60),
+            const SizedBox(height: 60),
           ],
         ),
       ),

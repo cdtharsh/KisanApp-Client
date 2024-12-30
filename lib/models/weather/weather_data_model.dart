@@ -1,6 +1,6 @@
-import 'package:kisanapp/models/weather_current.dart';
-import 'package:kisanapp/models/weather_forecast_total_days.dart';
-import 'package:kisanapp/models/weather_location_model.dart';
+import 'package:kisanapp/models/weather/weather_current_model.dart';
+import 'package:kisanapp/models/weather/weather_forecast_total_days.dart';
+import 'package:kisanapp/models/weather/weather_location_model.dart';
 
 class WeatherResponse {
   final Location location;

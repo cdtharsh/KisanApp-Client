@@ -1,4 +1,4 @@
-import 'package:kisanapp/models/weather_forecast_day.dart';
+import 'package:kisanapp/models/weather/weather_forecast_day.dart';
 
 class Forecast {
   final List<ForecastDay> forecastDays;

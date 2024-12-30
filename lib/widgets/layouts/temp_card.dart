@@ -7,11 +7,9 @@ class TemperatureCard extends StatelessWidget {
   final String? location;
   final String? condition;
   final String? iconUrl;
-  final double? temperature;
-  final double? windChill;
-  final double? heatIndex;
-  final double? maxTemp;
-  final double? minTemp;
+  final num? temperature;
+  final num? maxTemp;
+  final num? minTemp;
   final bool isDark;
   final VoidCallback? onTap;
 
@@ -21,30 +19,26 @@ class TemperatureCard extends StatelessWidget {
     this.condition,
     this.iconUrl,
     this.temperature,
-    this.windChill,
-    this.heatIndex,
     this.maxTemp,
+    this.minTemp,
     required this.isDark,
     this.onTap,
-    this.minTemp,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: GestureDetector(
         onTap: () {
           if (onTap != null) {
             onTap!();
           } else {
-            Get.toNamed(
-              AppRoutes.sprayCondition,
-            );
+            Get.toNamed(AppRoutes.sprayCondition);
           }
         },
         child: Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             color: isDark ? kDarkCard : kLightCard,
             borderRadius: BorderRadius.circular(25.0),
@@ -52,7 +46,7 @@ class TemperatureCard extends StatelessWidget {
               BoxShadow(
                 color: Colors.grey.withOpacity(0.3),
                 blurRadius: 8,
-                offset: Offset(0, 4),
+                offset: const Offset(0, 4),
               ),
             ],
           ),
@@ -67,7 +61,7 @@ class TemperatureCard extends StatelessWidget {
                     '$location',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     '$condition • $minTemp°C / $maxTemp°C',
                     style: TextStyle(

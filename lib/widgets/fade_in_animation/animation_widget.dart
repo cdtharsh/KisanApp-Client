@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/animation/fade_in_animation_controller.dart';
-import '../../models/fade_in_animation_model.dart';
+import '../../models/animation/fade_in_animation_model.dart';
 
 class KFadeInAnimation extends StatelessWidget {
   KFadeInAnimation({
