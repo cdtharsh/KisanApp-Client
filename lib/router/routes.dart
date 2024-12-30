@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:kisanapp/pages/spray_conditions.dart';
 import 'package:kisanapp/screens/authentication/email_input_screen.dart';
 import 'package:kisanapp/screens/authentication/otp_screen.dart';
 import 'package:kisanapp/screens/authentication/login_screen.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String inputEmail = '/inputEmail';
   static const String otp = '/otp';
   static const String navbar = '/nav';
+  static const String sprayCondition = '/sprayCondition';
 
   static List<GetPage> routes = [
     GetPage(name: splash, page: () => const SplashScreen()),
@@ -48,6 +50,7 @@ class AppRoutes {
             password: password,
           );
         }),
-    GetPage(name: navbar, page: () => const NavigationMenu())
+    GetPage(name: navbar, page: () => const NavigationMenu()),
+    GetPage(name: sprayCondition, page: () => const SprayConditionsScreen())
   ];
 }
