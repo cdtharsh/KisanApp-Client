@@ -11,6 +11,8 @@ import 'package:kisanapp/screens/startup/splash_screen.dart';
 import 'package:kisanapp/screens/startup/welcome_screen.dart';
 import 'package:kisanapp/widgets/layouts/nav_bar.dart';
 
+import '../pages/preview_page.dart';
+
 class AppRoutes {
   static const String splash = '/splash';
   static const String welcome = '/welcome';
@@ -23,6 +25,7 @@ class AppRoutes {
   static const String navbar = '/nav';
   static const String sprayCondition = '/sprayCondition';
   static const String weatherForcast = '/weatherForecast';
+  static const String preview = '/preview';
 
   static List<GetPage> routes = [
     GetPage(name: splash, page: () => const SplashScreen()),
@@ -55,5 +58,12 @@ class AppRoutes {
     GetPage(name: navbar, page: () => const NavigationMenu()),
     GetPage(name: sprayCondition, page: () => const SprayConditionsScreen()),
     GetPage(name: weatherForcast, page: () => const WeatherForcast()),
+    GetPage(
+      name: preview,
+      page: () {
+        final imagePath = Get.parameters['imagePath'] ?? '';
+        return PreviewPage(imagePath: imagePath);
+      },
+    ),
   ];
 }

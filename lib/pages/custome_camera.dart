@@ -1,8 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kisanapp/constants/text_strings.dart';
+import 'package:kisanapp/pages/preview_page.dart';
 import 'package:kisanapp/utils/notification/custome_snackbar.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -68,13 +69,7 @@ class CameraScreenState extends State<CameraScreen>
     try {
       final image = await _controller.takePicture();
       if (mounted) {
-        // Navigate to preview page with the captured image only if the widget is still mounted
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PreviewPage(imagePath: image.path),
-          ),
-        );
+        Get.to(PreviewPage(imagePath: image.path));
       }
     } catch (e) {
       if (mounted) {
@@ -90,12 +85,7 @@ class CameraScreenState extends State<CameraScreen>
         await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null && mounted) {
       // Navigate to preview page with the selected image only if the widget is still mounted
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PreviewPage(imagePath: pickedImage.path),
-        ),
-      );
+      Get.to(PreviewPage(imagePath: pickedImage.path));
     }
   }
 
@@ -233,36 +223,6 @@ class CameraScreenState extends State<CameraScreen>
             return const Center(child: CircularProgressIndicator());
           }
         },
-      ),
-    );
-  }
-}
-
-class PreviewPage extends StatelessWidget {
-  final String imagePath;
-
-  const PreviewPage({super.key, required this.imagePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Image.file(File(imagePath)),
-      ),
-      floatingActionButton: Align(
-        alignment: Alignment.bottomCenter, // Centers the floating action button
-        child: Padding(
-          padding: const EdgeInsets.all(16.0), // Optional padding
-          child: FloatingActionButton(
-            onPressed: () {},
-            backgroundColor: Colors.green, // Button color (green for tick)
-            shape: CircleBorder(),
-            child: const Icon(
-              Icons.check, // Right tick icon
-              size: 30,
-            ), // Ensures the button is circular
-          ),
-        ),
       ),
     );
   }
