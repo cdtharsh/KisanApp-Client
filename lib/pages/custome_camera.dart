@@ -13,35 +13,20 @@ class CameraScreen extends StatefulWidget {
   CameraScreenState createState() => CameraScreenState();
 }
 
-class CameraScreenState extends State<CameraScreen>
-    with SingleTickerProviderStateMixin {
+class CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
   late Future<void> initializeControllerFuture;
   late CameraDescription camera;
-  late AnimationController _animationController;
-  late Animation<EdgeInsetsGeometry> _boxAnimation;
 
   @override
   void initState() {
     super.initState();
     initializeControllerFuture = initializeCamera();
-
-    // Initialize the animation controller and animation
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 2),
-      reverseDuration: Duration(seconds: 2),
-    )..repeat(reverse: true);
-    _boxAnimation = Tween<EdgeInsetsGeometry>(
-      begin: EdgeInsets.all(130),
-      end: EdgeInsets.all(140),
-    ).animate(_animationController);
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -96,7 +81,8 @@ class CameraScreenState extends State<CameraScreen>
       builder: (context) {
         return AlertDialog(
           title: const Text('Help'),
-          content: const Text('This is a help popup.'),
+          content: const Text(
+              'This is a help popup. Please capture the image within the box that is 224x224 in size.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -133,26 +119,20 @@ class CameraScreenState extends State<CameraScreen>
                     ),
                   ),
                 ),
-                // Boxed Animation around the camera preview
-                AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, child) {
-                    return Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: _boxAnimation.value,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 5.0,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
+                // Static Box around the camera preview
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 224, // Fixed size for the image capture guide
+                    height: 224, // Fixed size for the image capture guide
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 5.0,
                       ),
-                    );
-                  },
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
                 Positioned(
                   bottom: 0,
