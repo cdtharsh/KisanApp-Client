@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kisanapp/constants/text_strings.dart';
+import 'package:kisanapp/utils/notification/custome_snackbar.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -10,46 +12,74 @@ class CameraScreen extends StatefulWidget {
   CameraScreenState createState() => CameraScreenState();
 }
 
-class CameraScreenState extends State<CameraScreen> {
+class CameraScreenState extends State<CameraScreen>
+    with SingleTickerProviderStateMixin {
   late CameraController _controller;
   late Future<void> initializeControllerFuture;
+  late CameraDescription camera;
+  late AnimationController _animationController;
+  late Animation<EdgeInsetsGeometry> _boxAnimation;
 
   @override
   void initState() {
     super.initState();
     initializeControllerFuture = initializeCamera();
-  }
 
-  Future<void> initializeCamera() async {
-    final cameras = await availableCameras();
-    final camera = cameras.first; // Use the first camera
-    _controller = CameraController(
-      camera,
-      ResolutionPreset.high,
-    );
-    await _controller.initialize();
+    // Initialize the animation controller and animation
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+      reverseDuration: Duration(seconds: 2),
+    )..repeat(reverse: true);
+    _boxAnimation = Tween<EdgeInsetsGeometry>(
+      begin: EdgeInsets.all(130),
+      end: EdgeInsets.all(140),
+    ).animate(_animationController);
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _animationController.dispose();
     super.dispose();
+  }
+
+  // Initialize camera
+  Future<void> initializeCamera() async {
+    final cameras = await availableCameras();
+    camera = cameras.first; // Use the first camera
+    _controller = CameraController(
+      camera,
+      ResolutionPreset.high,
+    );
+
+    await _controller.initialize();
+
+    if (mounted) {
+      // Check if the widget is still mounted
+      // Set the camera orientation to auto adjust based on device position
+      _controller.setFlashMode(FlashMode.off);
+      setState(() {});
+    }
   }
 
   // Capture an image function
   Future<void> takePicture() async {
     try {
       final image = await _controller.takePicture();
-      print('Picture saved to ${image.path}');
-      // Navigate to preview page with the captured image
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PreviewPage(imagePath: image.path),
-        ),
-      );
+      if (mounted) {
+        // Navigate to preview page with the captured image only if the widget is still mounted
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PreviewPage(imagePath: image.path),
+          ),
+        );
+      }
     } catch (e) {
-      print('Error taking picture: $e');
+      if (mounted) {
+        CustomSnackbar.show(title: kError, message: e.toString());
+      }
     }
   }
 
@@ -58,8 +88,8 @@ class CameraScreenState extends State<CameraScreen> {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedImage =
         await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      // Navigate to preview page with the selected image
+    if (pickedImage != null && mounted) {
+      // Navigate to preview page with the selected image only if the widget is still mounted
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -92,9 +122,8 @@ class CameraScreenState extends State<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen size to adjust circle sizes
     final screenSize = MediaQuery.of(context).size;
-    final double iconSize = screenSize.width * 0.12; // 12% of screen width
+    final double iconSize = screenSize.width * 0.12;
 
     return Scaffold(
       body: FutureBuilder<void>(
@@ -103,54 +132,55 @@ class CameraScreenState extends State<CameraScreen> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Stack(
               children: [
-                // Full-screen camera preview
                 Align(
                   alignment: Alignment.center,
                   child: FittedBox(
-                    fit: BoxFit
-                        .cover, // Ensures the camera preview fits the screen properly
+                    fit: BoxFit.cover,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
+                      width: screenSize.width,
+                      height: screenSize.height,
                       child: CameraPreview(_controller),
                     ),
                   ),
                 ),
-                // Center guiding square
-                Center(
-                  child: Container(
-                    width: screenSize.width * 0.6, // 60% of screen width
-                    height: screenSize.height * 0.3, // 30% of screen height
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white, // Border color
-                        width: 3.0, // Border thickness
+                // Boxed Animation around the camera preview
+                AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: _boxAnimation.value,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 5.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                    );
+                  },
                 ),
-                // Bottom container with circular icons
                 Positioned(
-                  bottom: 0, // Position the container at the bottom
+                  bottom: 0,
                   left: 0,
                   right: 0,
                   child: Container(
-                    height: 100, // Fixed height for the container
-                    color: Colors.black
-                        .withOpacity(0.5), // Optional background color
+                    height: 100,
+                    color: Colors.black.withOpacity(0.5),
                     child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceAround, // Space between icons
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        // Left icon (Gallery button)
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
-                            onTap: openGallery, // Open gallery
+                            onTap: openGallery,
                             child: CircleAvatar(
                               backgroundColor: Colors.black87.withOpacity(0.2),
-                              radius: iconSize / 3, // Dynamically set size
+                              radius: iconSize / 3,
                               child: const Icon(
                                 Icons.image,
                                 color: Colors.white,
@@ -159,15 +189,13 @@ class CameraScreenState extends State<CameraScreen> {
                             ),
                           ),
                         ),
-                        // Middle icon (Camera button to take a picture)
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
-                            onTap: takePicture, // Trigger picture capture
+                            onTap: takePicture,
                             child: CircleAvatar(
                               backgroundColor: Colors.blue,
-                              radius: iconSize *
-                                  1.1, // Adjust size for the middle icon
+                              radius: iconSize * 1.1,
                               child: const Icon(
                                 Icons.camera_alt,
                                 color: Colors.white,
@@ -176,14 +204,13 @@ class CameraScreenState extends State<CameraScreen> {
                             ),
                           ),
                         ),
-                        // Right icon (Help button)
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
-                            onTap: showHelpPopup, // Show help popup
+                            onTap: showHelpPopup,
                             child: CircleAvatar(
                               backgroundColor: Colors.green,
-                              radius: iconSize / 3, // Dynamically set size
+                              radius: iconSize / 3,
                               child: const Icon(
                                 Icons.help_outline,
                                 color: Colors.white,
