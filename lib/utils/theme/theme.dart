@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'widget_theme/elevated_button_theme.dart';
-import 'widget_theme/outlined_button_theme.dart';
-import 'widget_theme/text_theme.dart';
+import 'button_theme/elevated_button_theme.dart';
+import 'button_theme/outlined_button_theme.dart';
+import 'text_theme/text_theme.dart';
 
 class KAppTheme {
   KAppTheme._();

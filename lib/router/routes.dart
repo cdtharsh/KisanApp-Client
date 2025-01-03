@@ -1,17 +1,17 @@
 import 'package:get/get.dart';
-import 'package:kisanapp/pages/spray_conditions.dart';
-import 'package:kisanapp/pages/weather_forcast.dart';
-import 'package:kisanapp/screens/authentication/email_input_screen.dart';
-import 'package:kisanapp/screens/authentication/otp_screen.dart';
-import 'package:kisanapp/screens/authentication/login_screen.dart';
-import 'package:kisanapp/screens/authentication/mail_verification.dart';
-import 'package:kisanapp/screens/authentication/signup_screen.dart';
-import 'package:kisanapp/screens/home/home.dart';
-import 'package:kisanapp/screens/startup/splash_screen.dart';
-import 'package:kisanapp/screens/startup/welcome_screen.dart';
-import 'package:kisanapp/widgets/layouts/nav_bar.dart';
+import 'package:kisanapp/screens/spray_condition_screen/spray_conditions.dart';
+import 'package:kisanapp/screens/weather_screen/weather_forcast.dart';
+import 'package:kisanapp/screens/forget_pass_screen/email_input_screen.dart';
+import 'package:kisanapp/screens/otp_screen/otp_screen.dart';
+import 'package:kisanapp/screens/login_screen/login_screen.dart';
+import 'package:kisanapp/screens/mail_verification_screen/mail_verification.dart';
+import 'package:kisanapp/screens/signup_screen/signup_screen.dart';
+import 'package:kisanapp/screens/home_screen/home_screen.dart';
+import 'package:kisanapp/screens/splash_screen/splash_screen.dart';
+import 'package:kisanapp/screens/welcome_screen/welcome_screen.dart';
+import 'package:kisanapp/widgets/bars/nav_bar.dart';
 
-import '../pages/preview_page.dart';
+import '../screens/preview_screen/preview_screen.dart';
 
 class AppRoutes {
   static const String splash = '/splash';

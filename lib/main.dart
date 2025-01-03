@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import ScreenUtil
 import 'package:get_storage/get_storage.dart';
 import 'package:kisanapp/router/routes.dart';
-import 'controller/data/user_data_controller.dart';
+import 'screens/login_screen/provider/user_data_controller.dart';
 import 'utils/theme/theme.dart';
 
 void main() async {
