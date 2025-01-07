@@ -1,14 +1,16 @@
-import 'package:get_storage/get_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:kisanapp/services/location/location_service.dart';
+import 'package:get_storage/get_storage.dart';
 
+import '../../../location/location_service.dart';
 import '../weather_api_service.dart';
 
 class WeatherService {
   final WeatherApiService weatherApiService = WeatherApiService();
   final GetStorage box = GetStorage();
 
-  Future<Map<String, dynamic>?> fetchWeatherData(String token) async {
+  Future<Map<String, dynamic>?> fetchWeatherData(
+      String token, BuildContext context) async {
     // Check for cached data
     final cachedData = box.read('weatherData');
     final cachedTimestamp = box.read('weatherTimestamp');
@@ -27,7 +29,7 @@ class WeatherService {
     // Fetch new weather data
     try {
       final locationService = LocationService();
-      Position position = await locationService.getCurrentLocation();
+      Position position = await locationService.getCurrentLocation(context);
       String lat = position.latitude.toStringAsFixed(2);
       String lon = position.longitude.toStringAsFixed(2);
 

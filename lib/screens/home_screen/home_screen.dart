@@ -64,7 +64,7 @@ class HomeScreenState extends State<HomeScreen> {
     String token = box.read('token');
 
     try {
-      final weatherJson = await weatherService.fetchWeatherData(token);
+      final weatherJson = await weatherService.fetchWeatherData(token, context);
       setState(() {
         weatherResponse = WeatherResponse.fromJson(weatherJson!);
       });
