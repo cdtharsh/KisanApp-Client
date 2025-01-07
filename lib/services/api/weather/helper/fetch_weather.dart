@@ -21,7 +21,7 @@ class WeatherService {
       final Duration difference = currentTime.difference(timestamp);
 
       // Use cached data if it's less than 1 hour old
-      if (difference.inMicroseconds < 1) {
+      if (difference.inMinutes < 60) {
         return cachedData;
       }
     }

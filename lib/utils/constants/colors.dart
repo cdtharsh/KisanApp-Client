@@ -52,3 +52,14 @@ const kAccentCoolGray = Color(0xFFB0BEC5); // Cool Gray
 const kDarkNavy = Color(0xFF34495E); // Dark Navy
 
 const kVividBlue = Color(0xFF2979FF); // Vivid Blue for better contrast
+
+const List<Color> randomPosterBgColors = [
+  Color(0xFFE70D56),
+  Color(0xFF9006A4),
+  Color(0xFF137C0B),
+  Color(0xFF0F2EDE),
+  Color(0xFFECBE23),
+  Color(0xFFA60FF1),
+  Color(0xFF0AE5CF),
+  Color(0xFFE518D1),
+];
