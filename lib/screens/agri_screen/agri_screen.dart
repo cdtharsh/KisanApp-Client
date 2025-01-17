@@ -12,7 +12,7 @@ class AgriProductPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: PosterSection(),
+        child: PosterSection(posterType: 'Agri'), // Filter posters by 'Agri'
       ),
     );
   }

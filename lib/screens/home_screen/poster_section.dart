@@ -5,7 +5,9 @@ import '../../services/api/posters/poster_api_service.dart';
 import '../../utils/constants/colors.dart';
 
 class PosterSection extends StatefulWidget {
-  const PosterSection({super.key});
+  final String? posterType; // Add a parameter to filter poster types
+
+  const PosterSection({super.key, this.posterType});
 
   @override
   PosterSectionState createState() => PosterSectionState();
@@ -28,7 +30,11 @@ class PosterSectionState extends State<PosterSection> {
       final response = await apiService.getPosters();
       final List<dynamic> postersData = response['data'];
       setState(() {
-        posters = postersData.map((poster) {
+        posters = postersData
+            .where((poster) =>
+                widget.posterType == null || // No filtering if type is null
+                poster['posterType'] == widget.posterType)
+            .map((poster) {
           return Poster(
             title: poster['posterName'],
             imageUrl: poster['imageUrl'] == "no_url"
@@ -71,8 +77,7 @@ class PosterSectionState extends State<PosterSection> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .spaceBetween, // Ensures content is spread across the available space
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 20, right: 10),
@@ -115,7 +120,7 @@ class PosterSectionState extends State<PosterSection> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: AspectRatio(
-                                aspectRatio: 1, // Square aspect ratio
+                                aspectRatio: 1,
                                 child: Image.network(
                                   posters[index].imageUrl,
                                   fit: BoxFit.fitWidth,
