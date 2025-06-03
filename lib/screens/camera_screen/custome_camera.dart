@@ -10,18 +10,18 @@ class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
 
   @override
-  CameraScreenState createState() => CameraScreenState();
+  State<CameraScreen> createState() => _CameraScreenState();
 }
 
-class CameraScreenState extends State<CameraScreen> {
+class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
-  late Future<void> initializeControllerFuture;
-  late CameraDescription camera;
+  late Future<void> _initializeControllerFuture;
+  late CameraDescription _camera;
 
   @override
   void initState() {
     super.initState();
-    initializeControllerFuture = initializeCamera();
+    _initializeControllerFuture = _initializeCamera();
   }
 
   @override
@@ -30,164 +30,134 @@ class CameraScreenState extends State<CameraScreen> {
     super.dispose();
   }
 
-  // Initialize camera
-  Future<void> initializeCamera() async {
-    final cameras = await availableCameras();
-    camera = cameras.first; // Use the first camera
-    _controller = CameraController(
-      camera,
-      ResolutionPreset.high,
-    );
+  Future<void> _initializeCamera() async {
+    try {
+      final cameras = await availableCameras();
+      _camera = cameras.first;
 
-    await _controller.initialize();
+      _controller = CameraController(_camera, ResolutionPreset.high);
+      await _controller.initialize();
+      await _controller.setFlashMode(FlashMode.off);
 
-    if (mounted) {
-      // Check if the widget is still mounted
-      // Set the camera orientation to auto adjust based on device position
-      _controller.setFlashMode(FlashMode.off);
-      setState(() {});
+      if (mounted) setState(() {});
+    } catch (e) {
+      CustomSnackbar.show(title: kError, message: e.toString());
     }
   }
 
-  // Capture an image function
-  Future<void> takePicture() async {
+  Future<void> _takePicture() async {
     try {
       final image = await _controller.takePicture();
       if (mounted) {
-        Get.to(PreviewPage(imagePath: image.path));
+        Get.to(() => PreviewPage(imagePath: image.path));
       }
     } catch (e) {
-      if (mounted) {
-        CustomSnackbar.show(title: kError, message: e.toString());
-      }
+      CustomSnackbar.show(title: kError, message: e.toString());
     }
   }
 
-  // Open gallery function
-  Future<void> openGallery() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedImage =
-        await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null && mounted) {
-      // Navigate to preview page with the selected image only if the widget is still mounted
-      Get.to(PreviewPage(imagePath: pickedImage.path));
+  Future<void> _openGallery() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null && mounted) {
+      Get.to(() => PreviewPage(imagePath: image.path));
     }
   }
 
-  // Show help popup
-  void showHelpPopup() {
+  void _showHelpDialog() {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Help'),
-          content: const Text(
-              'This is a help popup. Please capture the image within the box that is 224x224 in size.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
+      builder: (context) => AlertDialog(
+        title: const Text('Help'),
+        content: const Text(
+          'Capture the image within the box (224x224). Ensure the image is well-lit and focused for accurate diagnosis.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final double iconSize = screenSize.width * 0.12;
-
     return Scaffold(
+      backgroundColor: Colors.black,
       body: FutureBuilder<void>(
-        future: initializeControllerFuture,
+        future: _initializeControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Stack(
               children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: SizedBox(
-                      width: screenSize.width,
-                      height: screenSize.height,
-                      child: CameraPreview(_controller),
-                    ),
-                  ),
-                ),
-                // Static Box around the camera preview
+                CameraPreview(_controller),
+                // Capture guide
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    width: 224, // Fixed size for the image capture guide
-                    height: 224, // Fixed size for the image capture guide
+                    width: 224,
+                    height: 224,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.white,
-                        width: 5.0,
+                        // color: Colors.black,
+                        width: 4,
                       ),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                            // color: Colors.white60,
+                            color: Colors.transparent
+                            // blurRadius: 10,
+                            // spreadRadius: 2,
+                            ),
+                      ],
                     ),
                   ),
                 ),
+                // Bottom action buttons
                 Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
                   child: Container(
-                    height: 100,
-                    color: Colors.black.withOpacity(0.5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: openGallery,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black87.withOpacity(0.2),
-                              radius: iconSize / 3,
-                              child: const Icon(
-                                Icons.image,
-                                color: Colors.white,
-                                size: 30,
-                              ),
+                        _buildActionIcon(
+                          icon: Icons.image,
+                          color: Colors.white,
+                          onTap: _openGallery,
+                          tooltip: 'Open Gallery',
+                        ),
+                        GestureDetector(
+                          onTap: _takePicture,
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.blueAccent,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              size: 40,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: takePicture,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.blue,
-                              radius: iconSize * 1.1,
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: showHelpPopup,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.green,
-                              radius: iconSize / 3,
-                              child: const Icon(
-                                Icons.help_outline,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                            ),
-                          ),
+                        _buildActionIcon(
+                          icon: Icons.help_outline,
+                          color: Colors.white,
+                          onTap: _showHelpDialog,
+                          tooltip: 'Help',
                         ),
                       ],
                     ),
@@ -197,12 +167,35 @@ class CameraScreenState extends State<CameraScreen> {
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('Error initializing camera: ${snapshot.error}'),
+              child: Text(
+                'Error initializing camera:\n${snapshot.error}',
+                style: const TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
             );
           } else {
             return const Center(child: CircularProgressIndicator());
           }
         },
+      ),
+    );
+  }
+
+  Widget _buildActionIcon({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+    String? tooltip,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Tooltip(
+        message: tooltip ?? '',
+        child: CircleAvatar(
+          radius: 28,
+          backgroundColor: Colors.white.withOpacity(0.1),
+          child: Icon(icon, color: color, size: 30),
+        ),
       ),
     );
   }

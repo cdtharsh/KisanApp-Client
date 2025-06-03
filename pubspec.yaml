@@ -30,6 +30,8 @@ dependencies:
   image: ^4.5.2
   mime: ^2.0.0
   http_parser: ^4.0.2
+  marquee: ^2.3.0
+  share_plus: ^11.0.0
 
 dev_dependencies:
   flutter_test:

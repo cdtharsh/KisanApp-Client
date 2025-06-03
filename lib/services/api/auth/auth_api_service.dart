@@ -23,6 +23,7 @@ class AuthApiService extends ApiServiceBase {
         'firstName': firstName,
         'lastName': lastName,
         'address': address,
+        'isAdmin': false,
       },
     );
   }
